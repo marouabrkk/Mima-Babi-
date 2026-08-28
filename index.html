@@ -5,119 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Le Coffre aux Trésors de Khadija ❤️</title>
 
-    <!-- Polices douces Google Fonts -->
+    <!-- Polices Élégantes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&family=Sacramento&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-page: #FAF7F2;
-            --card-white: #FFFFFF;
+            --bg-body: #FAF7F2;
+            --bg-card: #FFFFFF;
             --mima-pink: #D97380;
-            --mima-light: #FDF0F2;
+            --mima-bg: #FDF0F2;
             --babi-blue: #5B8FA8;
-            --babi-light: #EEF6FA;
+            --babi-bg: #EEF6FA;
             --gold-18: #B8860B;
-            --gold-light: #FDF9F0;
-            --btn-orange: #D37353;
-            --text-main: #332626;
-            --text-sub: #7A6D6B;
-            --border-line: #EDE4DC;
-            --danger-red: #D9534F;
+            --gold-bg: #FDF9F0;
+            --terracotta: #D37353;
+            --text-dark: #332626;
+            --text-muted: #7A6D6B;
+            --border: #EDE4DC;
+            --danger: #D9534F;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-main);
+            background-color: var(--bg-body);
+            color: var(--text-dark);
             padding-bottom: 80px;
         }
 
         .serif { font-family: 'Playfair Display', serif; }
+        .handwritten { font-family: 'Sacramento', cursive; }
 
         .container {
-            max-width: 650px;
+            max-width: 750px;
             margin: 0 auto;
             padding: 0 16px;
         }
 
         /* EN-TÊTE */
-        .top-header {
+        .site-header {
             text-align: center;
-            padding: 30px 15px 20px;
+            padding: 35px 15px 25px;
             background: #FFFFFF;
-            border-bottom: 1px solid var(--border-line);
+            border-bottom: 1px solid var(--border);
             margin-bottom: 20px;
         }
 
-        .top-badge {
+        .header-tag {
             display: inline-block;
-            background: var(--bg-page);
-            color: var(--btn-orange);
-            font-weight: 700;
+            background: var(--bg-body);
+            color: var(--terracotta);
             font-size: 0.8rem;
-            padding: 5px 14px;
+            font-weight: 700;
+            padding: 4px 14px;
             border-radius: 20px;
-            border: 1px solid var(--border-line);
+            border: 1px solid var(--border);
             margin-bottom: 8px;
         }
 
-        .top-title {
+        .header-title {
             font-size: 2.2rem;
-            color: var(--text-main);
+            color: var(--text-dark);
         }
 
-        .top-subtitle {
-            font-size: 1.05rem;
-            color: var(--btn-orange);
-            font-style: italic;
+        .header-subtitle {
+            font-size: 1.1rem;
+            color: var(--terracotta);
+            margin-top: 4px;
         }
 
-        /* BARRE D'ONGLETS (NAVIGATION) */
-        .tabs-nav {
+        /* NAVIGATION PRINCIPALE */
+        .main-nav {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
             background: #FFFFFF;
             padding: 8px;
             border-radius: 16px;
-            border: 1px solid var(--border-line);
+            border: 1px solid var(--border);
             margin-bottom: 22px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
-        .tab-btn {
+        .nav-btn {
             background: transparent;
             border: none;
             padding: 12px 6px;
             border-radius: 12px;
             font-family: inherit;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 700;
-            color: var(--text-sub);
+            color: var(--text-muted);
             cursor: pointer;
             text-align: center;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
 
-        .tab-btn.active {
-            background: var(--text-main);
+        .nav-btn.active {
+            background: var(--text-dark);
             color: #FFFFFF;
         }
 
-        .tab-btn.mima-tab.active { background: var(--mima-pink); }
-        .tab-btn.babi-tab.active { background: var(--babi-blue); }
-        .tab-btn.gold-tab.active { background: var(--gold-18); }
+        .nav-btn.tab-gold.active {
+            background: var(--gold-18);
+        }
 
-        /* CONTENUS DES ONGLETS */
         .tab-panel {
             display: none;
         }
@@ -126,37 +127,12 @@
             display: block;
         }
 
-        /* BANNIÈRES D'ESPACES */
-        .space-banner {
-            border-radius: 18px;
-            padding: 22px 18px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-line);
-        }
-
-        .banner-mima { background: var(--mima-light); border-left: 6px solid var(--mima-pink); }
-        .banner-babi { background: var(--babi-light); border-left: 6px solid var(--babi-blue); }
-        .banner-18 { background: var(--gold-light); border-left: 6px solid var(--gold-18); }
-
-        .age-badge {
-            display: inline-block;
-            background: #FFFFFF;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-top: 6px;
-            border: 1px solid var(--border-line);
-        }
-
         /* FORMULAIRES */
-        .card-form {
+        .form-card {
             background: #FFFFFF;
             border-radius: 18px;
-            padding: 25px 20px;
-            border: 1px solid var(--border-line);
+            padding: 26px 20px;
+            border: 1px solid var(--border);
             margin-bottom: 25px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.03);
         }
@@ -169,37 +145,36 @@
             display: block;
             font-size: 0.85rem;
             font-weight: 700;
-            color: var(--text-main);
             margin-bottom: 6px;
+            color: var(--text-dark);
         }
 
-        .form-control {
+        .form-input {
             width: 100%;
             padding: 12px 15px;
             border-radius: 12px;
-            border: 1px solid var(--border-line);
+            border: 1px solid var(--border);
             font-family: inherit;
             font-size: 0.95rem;
             background: #FCFAF8;
-            color: var(--text-main);
+            color: var(--text-dark);
             outline: none;
         }
 
-        .form-control:focus {
+        .form-input:focus {
             background: #FFFFFF;
-            border-color: var(--btn-orange);
+            border-color: var(--terracotta);
         }
 
-        /* Boutons de sélection d'enfant */
-        .picker-grid {
+        .kid-choice-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 15px;
         }
 
-        .picker-btn {
-            border: 2px solid var(--border-line);
+        .kid-btn {
+            border: 2px solid var(--border);
             background: #FCFAF8;
             padding: 12px;
             border-radius: 12px;
@@ -210,33 +185,33 @@
             text-align: center;
         }
 
-        .picker-btn.selected-mima {
+        .kid-btn.active-mima {
             border-color: var(--mima-pink);
-            background: var(--mima-light);
+            background: var(--mima-bg);
             color: var(--mima-pink);
         }
 
-        .picker-btn.selected-babi {
+        .kid-btn.active-babi {
             border-color: var(--babi-blue);
-            background: var(--babi-light);
+            background: var(--babi-bg);
             color: var(--babi-blue);
         }
 
-        /* Enregistreur audio */
-        .voice-box {
+        /* ENREGISTREUR AUDIO */
+        .recorder-container {
             background: #FAF7F2;
-            border: 2px dashed var(--btn-orange);
+            border: 2px dashed var(--terracotta);
             border-radius: 16px;
             padding: 18px;
             text-align: center;
             margin: 16px 0;
         }
 
-        .record-btn-big {
+        .mic-btn-round {
             width: 65px;
             height: 65px;
             border-radius: 50%;
-            background: var(--btn-orange);
+            background: var(--terracotta);
             color: #FFFFFF;
             border: none;
             font-size: 1.5rem;
@@ -247,8 +222,8 @@
             box-shadow: 0 4px 15px rgba(211, 115, 83, 0.35);
         }
 
-        .record-btn-big.is-recording {
-            background: var(--danger-red);
+        .mic-btn-round.recording {
+            background: var(--danger);
             animation: pulse 1s infinite alternate;
         }
 
@@ -257,9 +232,9 @@
             to { transform: scale(1.1); }
         }
 
-        .btn-action-main {
+        .btn-submit {
             width: 100%;
-            background: var(--btn-orange);
+            background: var(--terracotta);
             color: #FFFFFF;
             border: none;
             padding: 15px;
@@ -271,288 +246,467 @@
             box-shadow: 0 6px 20px rgba(211, 115, 83, 0.25);
         }
 
-        /* CARTES DE SOUVENIRS */
-        .memory-card {
+        /* ===================================================
+           TABLEAU ORGANISÉ PAR ANNÉE ET MOIS
+           =================================================== */
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+        }
+
+        .chip-btn {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .chip-btn.active {
+            background: var(--text-dark);
+            color: #FFFFFF;
+            border-color: var(--text-dark);
+        }
+
+        .year-group {
+            margin-bottom: 30px;
+        }
+
+        .year-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .month-group {
             background: #FFFFFF;
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 18px;
-            border: 1px solid var(--border-line);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .month-header {
+            background: #FCFAF8;
+            padding: 12px 18px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--terracotta);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .memory-row {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
             position: relative;
         }
 
-        .mima-card-left { border-left: 5px solid var(--mima-pink); }
-        .babi-card-left { border-left: 5px solid var(--babi-blue); }
-
-        .memory-story {
-            background: #FAF7F2;
-            border-radius: 10px;
-            padding: 12px 15px;
-            margin: 12px 0;
-            font-size: 0.95rem;
-            line-height: 1.5;
+        .memory-row:last-child {
+            border-bottom: none;
         }
 
-        .memory-photo-view {
-            width: 100%;
-            max-height: 280px;
-            object-fit: cover;
+        .memory-row.mima-edge { border-left: 5px solid var(--mima-pink); }
+        .memory-row.babi-edge { border-left: 5px solid var(--babi-blue); }
+
+        .row-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .badge-kid-tag {
+            font-weight: 700;
+            padding: 3px 10px;
             border-radius: 12px;
-            margin: 10px 0;
+            font-size: 0.8rem;
+        }
+        .tag-mima { background: var(--mima-bg); color: var(--mima-pink); }
+        .tag-babi { background: var(--babi-bg); color: var(--babi-blue); }
+
+        .row-story {
+            background: #FAF7F2;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            margin: 8px 0;
         }
 
-        .memory-audio-view {
+        .row-photo {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 10px;
+            margin: 8px 0;
+        }
+
+        .row-audio {
             width: 100%;
-            height: 40px;
+            height: 38px;
+            margin-top: 8px;
+        }
+
+        .btn-delete-row {
+            background: #FFF0F0;
+            color: var(--danger);
+            border: 1px solid #FFD0D0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
             margin-top: 10px;
         }
 
-        /* BOUTON SUPPRIMER PARTOUT */
-        .btn-delete-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: #FFF0F0;
-            color: var(--danger-red);
-            border: 1px solid #FFD0D0;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-family: inherit;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 12px;
+        /* ===================================================
+           ESPACE SECRETS 18 ANS & LIENS INDIVIDUELS
+           =================================================== */
+        .secret-portal-card {
+            background: var(--gold-bg);
+            border: 2px solid #E5C58D;
+            border-radius: 18px;
+            padding: 24px 18px;
+            margin-bottom: 22px;
         }
 
-        .btn-delete-item:hover {
-            background: var(--danger-red);
+        .secret-link-box {
+            background: #FFFFFF;
+            border: 1px dashed var(--gold-18);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 14px;
+            text-align: left;
+        }
+
+        .btn-copy-link {
+            background: var(--gold-18);
             color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        /* VUE DU COFFRE PRIVÉ D'UN ENFANT */
+        #privateVaultView {
+            display: none;
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 30px 20px;
+            border: 2px solid var(--gold-18);
+            box-shadow: 0 10px 30px rgba(184, 134, 11, 0.15);
+            text-align: center;
+        }
+
+        .wax-lock {
+            width: 70px;
+            height: 70px;
+            background: #962D2D;
+            color: #FFE6E6;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(150, 45, 45, 0.35);
+            border: 2px dashed #D47B7B;
+            margin-bottom: 12px;
         }
     </style>
 </head>
 <body>
 
-    <!-- EN-TÊTE -->
-    <header class="top-header">
+    <!-- EN-TÊTE DU SITE -->
+    <header class="site-header" id="mainHeader">
         <div class="container">
-            <span class="top-badge">❤️ POUR MA SŒUR KHADIJA</span>
-            <h1 class="top-title serif">Le Coffre aux Souvenirs</h1>
-            <p class="top-subtitle">Les Merveilles de Mima & Babi</p>
+            <span class="header-tag">❤️ POUR MA SŒUR KHADIJA</span>
+            <h1 class="header-title serif">Le Coffre aux Souvenirs</h1>
+            <p class="header-subtitle">Les Trésors de Mima (2023) & Babi (2025)</p>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- NAVIGATION PAR ONGLETS -->
-        <div class="tabs-nav">
-            <button type="button" class="tab-btn active" onclick="openSpace('spaceAdd', this)">➕ Ajouter</button>
-            <button type="button" class="tab-btn mima-tab" id="btnMimaTab" onclick="openSpace('spaceMima', this)">🌸 Mima</button>
-            <button type="button" class="tab-btn babi-tab" id="btnBabiTab" onclick="openSpace('spaceBabi', this)">🩵 Babi</button>
-            <button type="button" class="tab-btn gold-tab" id="btn18Tab" onclick="openSpace('space18', this)">🔒 18 Ans</button>
+        <!-- ========================================================
+             VUE DU COFFRE PRIVÉ SECRET (S'active avec le lien privé)
+             ======================================================== -->
+        <section id="privateVaultView">
+            <div class="wax-lock">🔒</div>
+            <h2 class="serif" id="vaultChildTitle" style="font-size: 2rem; color: var(--gold-18); margin-bottom: 4px;"></h2>
+            <p id="vaultUnlockSubtitle" style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; margin-bottom: 20px;"></p>
+
+            <div id="vaultLettersList">
+                <!-- Seules les lettres de cet enfant s'affichent ici -->
+            </div>
+
+            <div style="margin-top: 25px;">
+                <button type="button" onclick="exitVault()" style="background: transparent; border: 1px solid var(--border); padding: 8px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; color: var(--text-muted);">
+                    ← Retourner au site de souvenirs
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ========================================================
+             VUE NORMALE DU SITE (3 ONGLETS)
+             ======================================================== -->
+        <div id="normalSiteView">
+
+            <!-- BARRE DE NAVIGATION -->
+            <nav class="main-nav">
+                <button type="button" class="nav-btn active" onclick="switchNav('panelTable', this)">📊 Tableau Chronologique</button>
+                <button type="button" class="nav-btn" onclick="switchNav('panelAdd', this)">➕ Nouveau Souvenir</button>
+                <button type="button" class="nav-btn tab-gold" onclick="switchNav('panel18Secret', this)">🔒 Secrets 18 Ans</button>
+            </nav>
+
+            <!-- ----------------------------------------------------
+                 1. TABLEAU CHRONOLOGIQUE DES SOUVENIRS (PAR AN & MOIS)
+                 ---------------------------------------------------- -->
+            <section id="panelTable" class="tab-panel active-panel">
+                <div class="filter-header">
+                    <h2 class="serif" style="font-size: 1.6rem;">Le Grand Registre</h2>
+                    <div class="filter-chips">
+                        <button type="button" class="chip-btn active" onclick="filterTable('all', this)">Tous</button>
+                        <button type="button" class="chip-btn" onclick="filterTable('Mima', this)">🌸 Mima</button>
+                        <button type="button" class="chip-btn" onclick="filterTable('Babi', this)">🩵 Babi</button>
+                    </div>
+                </div>
+
+                <div id="timelineTableContainer">
+                    <!-- Généré automatiquement par Année et Mois -->
+                </div>
+            </section>
+
+
+            <!-- ----------------------------------------------------
+                 2. AJOUTER UN NOUVEAU SOUVENIR
+                 ---------------------------------------------------- -->
+            <section id="panelAdd" class="tab-panel">
+                <div class="form-card">
+                    <h2 class="serif" style="font-size: 1.6rem; text-align: center; margin-bottom: 15px;">Ajouter un Souvenir</h2>
+                    
+                    <form id="formGeneral" onsubmit="saveGeneralMemory(event)">
+                        <div class="form-row">
+                            <label class="form-label">POUR QUEL ENFANT ?</label>
+                            <div class="kid-choice-grid">
+                                <button type="button" class="kid-btn active-mima" id="btnKidMima" onclick="chooseKid('Mima')">🌸 Mima</button>
+                                <button type="button" class="kid-btn" id="btnKidBabi" onclick="chooseKid('Babi')">🩵 Babi</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">TITRE DU SOUVENIR</label>
+                            <input type="text" id="genTitle" class="form-input" placeholder="Ex: Premier éclat de rire, Première dent..." required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">DATE DU SOUVENIR</label>
+                            <input type="date" id="genDate" class="form-input" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">HISTOIRE / NOTE (Optionnel)</label>
+                            <textarea id="genStory" class="form-input" rows="2" placeholder="Racontez ce joli moment..."></textarea>
+                        </div>
+
+                        <!-- Micro -->
+                        <div class="recorder-container">
+                            <label class="form-label" style="margin-bottom: 8px;">🎙️ ENREGISTRER LA VOIX</label>
+                            <button type="button" class="mic-btn-round" id="genMicBtn" onclick="handleVoiceRecord('gen')">🎤</button>
+                            <div id="genMicStatus" style="font-size: 0.85rem; font-weight: 700; margin-top: 8px; color: var(--text-muted);">
+                                Appuyez pour enregistrer
+                            </div>
+                            <div id="genMicTimer" style="font-weight: 800; color: var(--danger); margin-top: 4px; display: none;">00:00</div>
+                            <audio id="genAudioPreview" controls style="display: none; width: 100%; margin-top: 10px;"></audio>
+                        </div>
+
+                        <!-- Photo -->
+                        <div class="form-row">
+                            <label class="form-label">📷 AJOUTER UNE PHOTO (Optionnel)</label>
+                            <input type="file" id="genPhotoFile" accept="image/*" class="form-input" onchange="handlePhotoPreview(event)">
+                            <div id="genPhotoBox" style="display: none; text-align: center; margin-top: 8px;">
+                                <img id="genPhotoImg" src="" style="max-height: 140px; border-radius: 10px;">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit">💾 Enregistrer dans le tableau</button>
+                    </form>
+                </div>
+            </section>
+
+
+            <!-- ----------------------------------------------------
+                 3. SECRETS 18 ANS (DÉPÔT ET LIENS PRIVÉS)
+                 ---------------------------------------------------- -->
+            <section id="panel18Secret" class="tab-panel">
+                <div class="secret-portal-card">
+                    <div style="font-size: 2rem; text-align: center;">🔒</div>
+                    <h2 class="serif" style="font-size: 1.6rem; color: var(--gold-18); text-align: center; margin-bottom: 6px;">
+                        Le Coffre Secret des 18 Ans
+                    </h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
+                        Ces messages ne sont <strong>JAMAIS visibles</strong> sur cette page.<br>
+                        Chaque enfant possède son propre lien privé et secret.
+                    </p>
+
+                    <!-- Les 2 Liens Privés pour Khadija -->
+                    <div class="secret-link-box">
+                        <strong style="color: var(--mima-pink);">🌸 Lien Secret pour MIMA (18 ans en 2041) :</strong>
+                        <div style="font-size: 0.8rem; color: #666; word-break: break-all; margin: 4px 0;" id="linkMimaDisplay">...</div>
+                        <button type="button" class="btn-copy-link" onclick="openChildVault('Mima')">👁️ Ouvrir le coffre secret de Mima</button>
+                    </div>
+
+                    <div class="secret-link-box" style="margin-top: 10px;">
+                        <strong style="color: var(--babi-blue);">🩵 Lien Secret pour BABI (18 ans en 2043) :</strong>
+                        <div style="font-size: 0.8rem; color: #666; word-break: break-all; margin: 4px 0;" id="linkBabiDisplay">...</div>
+                        <button type="button" class="btn-copy-link" style="background: var(--babi-blue);" onclick="openChildVault('Babi')">👁️ Ouvrir le coffre secret de Babi</button>
+                    </div>
+                </div>
+
+                <!-- Formulaire de Dépôt Secret -->
+                <div class="form-card" style="border: 2px solid #E5C58D;">
+                    <h3 class="serif" style="font-size: 1.4rem; text-align: center; margin-bottom: 12px; color: var(--gold-18);">
+                        ✉️ Déposer un Message Secret
+                    </h3>
+
+                    <form id="form18Secret" onsubmit="saveSecret18Message(event)">
+                        <div class="form-row">
+                            <label class="form-label">POUR QUEL ENFANT EST CE SECRET ?</label>
+                            <div class="kid-choice-grid">
+                                <button type="button" class="kid-btn active-mima" id="btnCapMima" onclick="chooseCapKid('Mima')">🌸 Mima (2041)</button>
+                                <button type="button" class="kid-btn" id="btnCapBabi" onclick="chooseCapKid('Babi')">🩵 Babi (2043)</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">TITRE DE LA LETTRE</label>
+                            <input type="text" id="capTitle" class="form-input" placeholder="Ex: Pour tes 18 ans mon ange..." required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">VOTRE LETTRE DU CŒUR</label>
+                            <textarea id="capLetter" class="form-input" rows="3" placeholder="Écrivez votre message secret qui ne sera lu qu'à ses 18 ans..." required></textarea>
+                        </div>
+
+                        <div class="recorder-container" style="background: var(--gold-bg); border-color: var(--gold-18);">
+                            <label class="form-label" style="margin-bottom: 8px;">🎙️ VOCAL SECRET POUR SES 18 ANS</label>
+                            <button type="button" class="mic-btn-round" id="capMicBtn" onclick="handleVoiceRecord('cap')" style="background: var(--gold-18);">🎤</button>
+                            <div id="capMicStatus" style="font-size: 0.85rem; font-weight: 700; margin-top: 8px; color: var(--text-muted);">
+                                Appuyez pour enregistrer
+                            </div>
+                            <div id="capMicTimer" style="font-weight: 800; color: var(--danger); margin-top: 4px; display: none;">00:00</div>
+                            <audio id="capAudioPreview" controls style="display: none; width: 100%; margin-top: 10px;"></audio>
+                        </div>
+
+                        <button type="submit" class="btn-submit" style="background: var(--gold-18);">
+                            🔒 Sceller dans son coffre personnel
+                        </button>
+                    </form>
+                </div>
+            </section>
+
         </div>
-
-        <!-- ===================================================
-             1. ESPACE AJOUTER UN SOUVENIR
-             =================================================== -->
-        <section id="spaceAdd" class="tab-panel active-panel">
-            <div class="card-form">
-                <h2 class="serif" style="font-size: 1.6rem; text-align: center; margin-bottom: 15px;">Ajouter un Souvenir</h2>
-                
-                <form id="formGeneral" onsubmit="handleSaveGeneral(event)">
-                    <div class="form-row">
-                        <label class="form-label">POUR QUEL ENFANT ?</label>
-                        <div class="picker-grid">
-                            <button type="button" class="picker-btn selected-mima" id="pickMima" onclick="selectKid('Mima')">🌸 Mima</button>
-                            <button type="button" class="picker-btn" id="pickBabi" onclick="selectKid('Babi')">🩵 Babi</button>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <label class="form-label">TITRE DU SOUVENIR</label>
-                        <input type="text" id="addTitle" class="form-control" placeholder="Ex: Premier éclat de rire..." required>
-                    </div>
-
-                    <div class="form-row">
-                        <label class="form-label">DATE DU SOUVENIR</label>
-                        <input type="date" id="addDate" class="form-control" required>
-                    </div>
-
-                    <div class="form-row">
-                        <label class="form-label">RACONTEZ CE MOMENT (Optionnel)</label>
-                        <textarea id="addStory" class="form-control" rows="2" placeholder="Que s'est-il passé ce jour-là ?"></textarea>
-                    </div>
-
-                    <!-- Enregistrement vocal -->
-                    <div class="voice-box">
-                        <label class="form-label" style="margin-bottom: 10px;">🎙️ ENREGISTRER SA PETITE VOIX</label>
-                        <button type="button" class="record-btn-big" id="genRecBtn" onclick="toggleRecord('gen')">🎤</button>
-                        <div id="genRecStatus" style="font-size: 0.85rem; font-weight: 700; margin-top: 8px; color: var(--text-sub);">
-                            Appuyez pour enregistrer
-                        </div>
-                        <div id="genRecTimer" style="font-weight: 800; color: var(--danger-red); margin-top: 4px; display: none;">00:00</div>
-                        <audio id="genAudioPreview" controls style="display: none; width: 100%; margin-top: 10px;"></audio>
-                    </div>
-
-                    <!-- Photo -->
-                    <div class="form-row">
-                        <label class="form-label">📷 AJOUTER UNE PHOTO (Optionnel)</label>
-                        <input type="file" id="addPhotoInput" accept="image/*" class="form-control" onchange="previewPhoto(event)">
-                        <div id="photoBox" style="display: none; text-align: center; margin-top: 8px;">
-                            <img id="photoPreviewImg" src="" style="max-height: 140px; border-radius: 10px;">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-action-main">💝 Enregistrer dans le coffre</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ===================================================
-             2. ESPACE 100% MIMA
-             =================================================== -->
-        <section id="spaceMima" class="tab-panel">
-            <div class="space-banner banner-mima">
-                <div style="font-size: 2rem;">🌸</div>
-                <h2 class="serif" style="font-size: 1.8rem; color: var(--mima-pink);">L'Espace de Mima</h2>
-                <p style="font-size: 0.85rem; color: var(--text-sub);">Née le 28 mai 2023</p>
-                <div class="age-badge" id="mimaAgeBadge">Calcul de l'âge...</div>
-            </div>
-
-            <div id="mimaFeed">
-                <!-- Souvenirs Mima -->
-            </div>
-        </section>
-
-        <!-- ===================================================
-             3. ESPACE 100% BABI
-             =================================================== -->
-        <section id="spaceBabi" class="tab-panel">
-            <div class="space-banner banner-babi">
-                <div style="font-size: 2rem;">🩵</div>
-                <h2 class="serif" style="font-size: 1.8rem; color: var(--babi-blue);">L'Espace de Babi</h2>
-                <p style="font-size: 0.85rem; color: var(--text-sub);">Né le 22 octobre 2025</p>
-                <div class="age-badge" id="babiAgeBadge">Calcul de l'âge...</div>
-            </div>
-
-            <div id="babiFeed">
-                <!-- Souvenirs Babi -->
-            </div>
-        </section>
-
-        <!-- ===================================================
-             4. ESPACE CAPSULES 18 ANS
-             =================================================== -->
-        <section id="space18" class="tab-panel">
-            <div class="space-banner banner-18">
-                <div style="font-size: 2rem;">🔒</div>
-                <h2 class="serif" style="font-size: 1.8rem; color: var(--gold-18);">Le Coffre des 18 Ans</h2>
-                <p style="font-size: 0.85rem; color: var(--text-sub);">Lettres et vocaux scellés jusqu'à leur majorité</p>
-            </div>
-
-            <!-- Formulaire dédié 18 ans -->
-            <div class="card-form" style="border: 2px solid #E5C58D;">
-                <h3 class="serif" style="font-size: 1.4rem; text-align: center; margin-bottom: 12px; color: var(--gold-18);">
-                    ✉️ Écrire une Lettre pour ses 18 ans
-                </h3>
-
-                <form id="formCapsule" onsubmit="handleSaveCapsule(event)">
-                    <div class="form-row">
-                        <label class="form-label">POUR QUEL ENFANT ?</label>
-                        <div class="picker-grid">
-                            <button type="button" class="picker-btn selected-mima" id="capPickMima" onclick="selectCapKid('Mima')">🌸 Mima (2041)</button>
-                            <button type="button" class="picker-btn" id="capPickBabi" onclick="selectCapKid('Babi')">🩵 Babi (2043)</button>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <label class="form-label">TITRE DE LA LETTRE</label>
-                        <input type="text" id="capTitle" class="form-control" placeholder="Ex: Ce que je te souhaite pour tes 18 ans..." required>
-                    </div>
-
-                    <div class="form-row">
-                        <label class="form-label">VOTRE LETTRE DU CŒUR</label>
-                        <textarea id="capLetter" class="form-control" rows="3" placeholder="Écris ici ton message pour son futur..." required></textarea>
-                    </div>
-
-                    <div class="voice-box" style="background: var(--gold-light); border-color: var(--gold-18);">
-                        <label class="form-label" style="margin-bottom: 10px;">🎙️ VOCAL SCELLÉ POUR SES 18 ANS</label>
-                        <button type="button" class="record-btn-big" id="capRecBtn" onclick="toggleRecord('cap')" style="background: var(--gold-18);">🎤</button>
-                        <div id="capRecStatus" style="font-size: 0.85rem; font-weight: 700; margin-top: 8px; color: var(--text-sub);">
-                            Appuyez pour enregistrer
-                        </div>
-                        <div id="capRecTimer" style="font-weight: 800; color: var(--danger-red); margin-top: 4px; display: none;">00:00</div>
-                        <audio id="capAudioPreview" controls style="display: none; width: 100%; margin-top: 10px;"></audio>
-                    </div>
-
-                    <button type="submit" class="btn-action-main" style="background: var(--gold-18);">
-                        🔒 Sceller cette lettre
-                    </button>
-                </form>
-            </div>
-
-            <div id="capsuleFeed">
-                <!-- Cartes des 18 ans -->
-            </div>
-        </section>
-
     </div>
 
     <script>
-        // DATES DE NAISSANCE
-        const birthMima = new Date(2023, 4, 28); // 28 mai 2023
-        const birthBabi = new Date(2025, 9, 22); // 22 oct 2025
+        // DATES OFFICIELLES
+        const birthDates = {
+            'Mima': new Date(2023, 4, 28), // 28 mai 2023
+            'Babi': new Date(2025, 9, 22)  // 22 oct 2025
+        };
 
-        let currentGeneralKid = 'Mima';
-        let currentCapsuleKid = 'Mima';
+        const monthNames = [
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        ];
 
-        let currentGenPhoto = null;
-        let currentGenAudio = null;
-        let currentCapAudio = null;
+        let currentKidChoice = 'Mima';
+        let currentCapChoice = 'Mima';
+        let tableFilter = 'all';
+
+        let currentGenPhotoData = null;
+        let currentGenAudioData = null;
+        let currentCapAudioData = null;
 
         let activeRecorder = null;
-        let recordedChunks = [];
+        let audioChunks = [];
         let isRecording = false;
-        let recordTimerInterval = null;
-        let recordSeconds = 0;
+        let timerInterval = null;
+        let elapsedSeconds = 0;
 
         // Date du jour par défaut
         try {
-            document.getElementById('addDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
         } catch(e) {}
 
-        // 1. CHANGEMENT D'ESPACE (ONGLET)
-        function openSpace(spaceId, buttonEl) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active-panel'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        // VÉRIFICATION D'UN ACCÈS DIRECT PAR LIEN SECRET (?vault=Mima ou ?vault=Babi)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vault = urlParams.get('vault');
+            if (vault === 'mima' || vault === 'Mima') {
+                openChildVault('Mima');
+            } else if (vault === 'babi' || vault === 'Babi') {
+                openChildVault('Babi');
+            } else {
+                renderTableau();
+                updateSecretLinksDisplay();
+            }
+        });
 
-            const target = document.getElementById(spaceId);
+        // 1. CHANGEMENT D'ONGLET PRINCIPAL
+        function switchNav(panelId, btnElement) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active-panel'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            const target = document.getElementById(panelId);
             if (target) target.classList.add('active-panel');
-            if (buttonEl) buttonEl.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            renderFeed();
+            if (panelId === 'panelTable') renderTableau();
+            if (panelId === 'panel18Secret') updateSecretLinksDisplay();
         }
 
-        // 2. CHOIX ENFANT
-        function selectKid(kid) {
-            currentGeneralKid = kid;
-            document.getElementById('pickMima').className = (kid === 'Mima') ? 'picker-btn selected-mima' : 'picker-btn';
-            document.getElementById('pickBabi').className = (kid === 'Babi') ? 'picker-btn selected-babi' : 'picker-btn';
+        function chooseKid(kid) {
+            currentKidChoice = kid;
+            document.getElementById('btnKidMima').className = (kid === 'Mima') ? 'kid-btn active-mima' : 'kid-btn';
+            document.getElementById('btnKidBabi').className = (kid === 'Babi') ? 'kid-btn active-babi' : 'kid-btn';
         }
 
-        function selectCapKid(kid) {
-            currentCapsuleKid = kid;
-            document.getElementById('capPickMima').className = (kid === 'Mima') ? 'picker-btn selected-mima' : 'picker-btn';
-            document.getElementById('capPickBabi').className = (kid === 'Babi') ? 'picker-btn selected-babi' : 'picker-btn';
+        function chooseCapKid(kid) {
+            currentCapChoice = kid;
+            document.getElementById('btnCapMima').className = (kid === 'Mima') ? 'kid-btn active-mima' : 'kid-btn';
+            document.getElementById('btnCapBabi').className = (kid === 'Babi') ? 'kid-btn active-babi' : 'kid-btn';
         }
 
-        // 3. CALCUL DE L'ÂGE
-        function calculateKidAge(kid, dateString) {
+        // 2. CALCUL DE L'ÂGE
+        function calculateAge(kid, dateStr) {
             try {
-                const bDate = (kid === 'Mima') ? birthMima : birthBabi;
-                const eDate = new Date(dateString);
-
+                const bDate = birthDates[kid];
+                const eDate = new Date(dateStr);
                 if (eDate < bDate) return "Avant la naissance";
 
                 let years = eDate.getFullYear() - bDate.getFullYear();
@@ -578,35 +732,35 @@
             }
         }
 
-        // 4. GESTION DU MICRO
-        async function toggleRecord(mode) {
-            const btn = document.getElementById(mode + 'RecBtn');
-            const status = document.getElementById(mode + 'RecStatus');
-            const timer = document.getElementById(mode + 'RecTimer');
+        // 3. ENREGISTREUR AUDIO ROBUSTE
+        async function handleVoiceRecord(mode) {
+            const btn = document.getElementById(mode + 'MicBtn');
+            const status = document.getElementById(mode + 'MicStatus');
+            const timer = document.getElementById(mode + 'MicTimer');
             const preview = document.getElementById(mode + 'AudioPreview');
 
             if (!isRecording) {
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert("Pour enregistrer la voix, autorisez l'accès au micro dans Safari.");
+                    alert("Autorisez l'accès au micro dans votre navigateur pour enregistrer !");
                     return;
                 }
 
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     activeRecorder = new MediaRecorder(stream);
-                    recordedChunks = [];
+                    audioChunks = [];
 
                     activeRecorder.ondataavailable = e => {
-                        if (e.data.size > 0) recordedChunks.push(e.data);
+                        if (e.data.size > 0) audioChunks.push(e.data);
                     };
 
                     activeRecorder.onstop = () => {
-                        const blob = new Blob(recordedChunks, { type: 'audio/mp3' });
+                        const blob = new Blob(audioChunks, { type: 'audio/mp3' });
                         const reader = new FileReader();
                         reader.readAsDataURL(blob);
                         reader.onloadend = () => {
-                            if (mode === 'gen') currentGenAudio = reader.result;
-                            if (mode === 'cap') currentCapAudio = reader.result;
+                            if (mode === 'gen') currentGenAudioData = reader.result;
+                            if (mode === 'cap') currentCapAudioData = reader.result;
                             preview.src = reader.result;
                             preview.style.display = 'block';
                             status.textContent = "▶ Réécouter le vocal";
@@ -615,293 +769,320 @@
 
                     activeRecorder.start();
                     isRecording = true;
-                    btn.classList.add('is-recording');
+                    btn.classList.add('recording');
                     btn.textContent = "⏹";
                     status.textContent = "🔴 Enregistrement...";
                     timer.style.display = 'block';
 
-                    recordSeconds = 0;
-                    recordTimerInterval = setInterval(() => {
-                        recordSeconds++;
-                        const m = String(Math.floor(recordSeconds / 60)).padStart(2, '0');
-                        const s = String(recordSeconds % 60).padStart(2, '0');
+                    elapsedSeconds = 0;
+                    timerInterval = setInterval(() => {
+                        elapsedSeconds++;
+                        const m = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+                        const s = String(elapsedSeconds % 60).padStart(2, '0');
                         timer.textContent = `${m}:${s}`;
                     }, 1000);
 
                 } catch (err) {
-                    alert("Micro bloqué : Veuillez autoriser l'accès au micro dans les paramètres !");
+                    alert("Micro non accessible. Vérifiez les autorisations de votre appareil.");
                 }
             } else {
                 try { activeRecorder.stop(); } catch(e) {}
                 isRecording = false;
-                btn.classList.remove('is-recording');
+                btn.classList.remove('recording');
                 btn.textContent = "🎤";
                 timer.style.display = 'none';
-                clearInterval(recordTimerInterval);
+                clearInterval(timerInterval);
             }
         }
 
-        // 5. APERÇU PHOTO
-        function previewPhoto(event) {
+        // 4. APERÇU PHOTO
+        function handlePhotoPreview(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = ev => {
-                    currentGenPhoto = ev.target.result;
-                    document.getElementById('photoPreviewImg').src = currentGenPhoto;
-                    document.getElementById('photoBox').style.display = 'block';
+                    currentGenPhotoData = ev.target.result;
+                    document.getElementById('genPhotoImg').src = currentGenPhotoData;
+                    document.getElementById('genPhotoBox').style.display = 'block';
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // 6. SAUVEGARDER UN SOUVENIR
-        function handleSaveGeneral(e) {
+        // 5. SAUVEGARDE SOUVENIR DANS LE TABLEAU
+        function saveGeneralMemory(e) {
             e.preventDefault();
 
-            const title = document.getElementById('addTitle').value.trim();
-            const date = document.getElementById('addDate').value;
-            const story = document.getElementById('addStory').value.trim();
-            const calculatedAge = calculateKidAge(currentGeneralKid, date);
+            const title = document.getElementById('genTitle').value.trim();
+            const date = document.getElementById('genDate').value;
+            const story = document.getElementById('genStory').value.trim();
+            const ageCalculated = calculateAge(currentKidChoice, date);
 
             const newMemory = {
                 id: 'mem_' + Date.now(),
-                kid: currentGeneralKid,
+                kid: currentKidChoice,
                 title: title,
                 date: date,
-                age: calculatedAge,
+                age: ageCalculated,
                 story: story,
-                photo: currentGenPhoto,
-                audio: currentGenAudio
+                photo: currentGenPhotoData,
+                audio: currentGenAudioData
             };
 
-            let list = getStoredData('khadija_final_memories');
-            list.unshift(newMemory);
-            setStoredData('khadija_final_memories', list);
+            let memories = getLocal('khadija_timeline_memories');
+            memories.unshift(newMemory);
+            setLocal('khadija_timeline_memories', memories);
 
             // Reset
             document.getElementById('formGeneral').reset();
-            currentGenPhoto = null;
-            currentGenAudio = null;
-            document.getElementById('photoBox').style.display = 'none';
+            currentGenPhotoData = null;
+            currentGenAudioData = null;
+            document.getElementById('genPhotoBox').style.display = 'none';
             document.getElementById('genAudioPreview').style.display = 'none';
-            document.getElementById('genRecStatus').textContent = "Appuyez pour enregistrer";
-            document.getElementById('addDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
+            document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
 
-            alert("Souvenir bien ajouté dans l'espace de " + currentGeneralKid + " ! ❤️");
-
-            // Ouvrir l'espace de l'enfant
-            if (currentGeneralKid === 'Mima') {
-                openSpace('spaceMima', document.getElementById('btnMimaTab'));
-            } else {
-                openSpace('spaceBabi', document.getElementById('btnBabiTab'));
-            }
+            alert("Souvenir ajouté au tableau ! ❤️");
+            switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
         }
 
-        // 7. SAUVEGARDER UNE CAPSULE 18 ANS
-        function handleSaveCapsule(e) {
+        // 6. SAUVEGARDE SECRÈTE 18 ANS (Stocké dans des tiroirs complètement séparés)
+        function saveSecret18Message(e) {
             e.preventDefault();
 
             const title = document.getElementById('capTitle').value.trim();
             const letter = document.getElementById('capLetter').value.trim();
-            const unlockDate = (currentCapsuleKid === 'Mima') ? '28 Mai 2041' : '22 Octobre 2043';
+            const storageKey = (currentCapChoice === 'Mima') ? 'vault_18_mima_secret' : 'vault_18_babi_secret';
 
-            const newCapsule = {
-                id: 'cap_' + Date.now(),
-                kid: currentCapsuleKid,
+            const newLetter = {
+                id: 'sec_' + Date.now(),
                 title: title,
                 letter: letter,
-                audio: currentCapAudio,
-                unlockDate: unlockDate
+                audio: currentCapAudioData,
+                dateAdded: new Date().toLocaleDateString('fr-FR')
             };
 
-            let list = getStoredData('khadija_final_capsules');
-            list.unshift(newCapsule);
-            setStoredData('khadija_final_capsules', list);
+            let vaultList = getLocal(storageKey);
+            vaultList.unshift(newLetter);
+            setLocal(storageKey, vaultList);
 
-            document.getElementById('formCapsule').reset();
-            currentCapAudio = null;
+            document.getElementById('form18Secret').reset();
+            currentCapAudioData = null;
             document.getElementById('capAudioPreview').style.display = 'none';
-            document.getElementById('capRecStatus').textContent = "Appuyez pour enregistrer";
+            document.getElementById('capMicStatus').textContent = "Appuyez pour enregistrer";
 
-            alert("Lettre scellée avec succès pour les 18 ans de " + currentCapsuleKid + " ! 🔒");
-            renderFeed();
+            alert("Message scellé avec succès dans le coffre secret de " + currentCapChoice + " ! 🔒");
         }
 
-        // 8. FONCTION DE SUPPRESSION (GARANTIE FONCTIONNELLE)
-        function deleteMemoryById(id) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer définitivement ce souvenir ?")) {
-                let list = getStoredData('khadija_final_memories');
+        // 7. SUPPRESSIONS SÉCURISÉES
+        function deleteMemory(id) {
+            if (confirm("Supprimer ce souvenir du tableau ?")) {
+                let list = getLocal('khadija_timeline_memories');
+                list = list.filter(m => m.id !== id);
+                setLocal('khadija_timeline_memories', list);
+                renderTableau();
+            }
+        }
+
+        function deleteSecretLetter(id, kid) {
+            if (confirm("Supprimer définitivement cette lettre secrète ?")) {
+                const storageKey = (kid === 'Mima') ? 'vault_18_mima_secret' : 'vault_18_babi_secret';
+                let list = getLocal(storageKey);
                 list = list.filter(item => item.id !== id);
-                setStoredData('khadija_final_memories', list);
-                renderFeed();
+                setLocal(storageKey, list);
+                openChildVault(kid);
             }
         }
 
-        function deleteCapsuleById(id) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer cette capsule scellée ?")) {
-                let list = getStoredData('khadija_final_capsules');
-                list = list.filter(item => item.id !== id);
-                setStoredData('khadija_final_capsules', list);
-                renderFeed();
-            }
+        // 8. AFFICHAGE DU GRAND TABLEAU PAR ANNÉE ET PAR MOIS
+        function filterTable(kid, btnEl) {
+            tableFilter = kid;
+            document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
+            btnEl.classList.add('active');
+            renderTableau();
         }
 
-        // 9. LOCAL STORAGE SÉCURISÉ
-        function getStoredData(key) {
-            try {
-                return JSON.parse(localStorage.getItem(key)) || [];
-            } catch(e) {
-                return [];
-            }
-        }
+        function renderTableau() {
+            const container = document.getElementById('timelineTableContainer');
+            let memories = getLocal('khadija_timeline_memories');
 
-        function setStoredData(key, value) {
-            try {
-                localStorage.setItem(key, JSON.stringify(value));
-            } catch(e) {}
-        }
-
-        // 10. AFFICHAGE DES CONTENUS
-        function renderFeed() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById('mimaAgeBadge').textContent = "Âge aujourd'hui : " + calculateKidAge('Mima', todayStr);
-            document.getElementById('babiAgeBadge').textContent = "Âge aujourd'hui : " + calculateKidAge('Babi', todayStr);
-
-            let memories = getStoredData('khadija_final_memories');
-            let capsules = getStoredData('khadija_final_capsules');
-
-            // Données d'exemples initiaux
+            // Données d'exemple initiales
             if (memories.length === 0) {
                 memories = [
                     {
                         id: 'mem_1',
                         kid: 'Mima',
-                        title: 'Son premier grand éclat de rire',
-                        date: '2024-03-12',
-                        age: calculateKidAge('Mima', '2024-03-12'),
-                        story: 'Elle a rigolé aux éclats en jouant dans le salon avec sa maman !',
+                        title: 'Premier éclat de rire',
+                        date: '2024-03-15',
+                        age: calculateAge('Mima', '2024-03-15'),
+                        story: 'Elle riait tellement fort avec son doudou !',
                         photo: null,
                         audio: null
                     },
                     {
                         id: 'mem_2',
                         kid: 'Babi',
-                        title: 'Ses petits gazouillis du matin',
+                        title: 'Premiers babillages',
                         date: '2026-02-10',
-                        age: calculateKidAge('Babi', '2026-02-10'),
-                        story: 'Il fait des sons tellement mignons au réveil.',
+                        age: calculateAge('Babi', '2026-02-10'),
+                        story: 'Il gazouille tous les matins au réveil.',
                         photo: null,
                         audio: null
                     }
                 ];
             }
 
-            if (capsules.length === 0) {
-                capsules = [
-                    {
-                        id: 'cap_1',
-                        kid: 'Mima',
-                        title: 'Lettre d\'amour pour tes 18 ans',
-                        letter: 'Ma petite princesse, ne perds jamais la douceur de ton sourire et ta joie de vivre.',
-                        audio: null,
-                        unlockDate: '28 Mai 2041'
-                    }
-                ];
+            const filtered = memories.filter(m => (tableFilter === 'all' || m.kid === tableFilter));
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Aucun souvenir enregistré dans cette catégorie.</div>';
+                return;
             }
 
-            // Rendu Mima
-            const mimaFeed = document.getElementById('mimaFeed');
-            mimaFeed.innerHTML = '';
-            const mimaList = memories.filter(m => m.kid === 'Mima');
-            if (mimaList.length === 0) {
-                mimaFeed.innerHTML = '<p style="text-align:center; color:#999; padding:20px;">Aucun souvenir pour Mima.</p>';
-            } else {
-                mimaList.forEach(m => {
-                    const card = document.createElement('div');
-                    card.className = 'memory-card mima-card-left';
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <strong style="color:var(--mima-pink);">🌸 Mima</strong>
-                            <span class="age-badge">Âge : ${m.age}</span>
-                        </div>
-                        <h3 class="serif" style="font-size:1.4rem; margin:6px 0;">${escapeText(m.title)}</h3>
-                        ${m.story ? `<div class="memory-story">${escapeText(m.story)}</div>` : ''}
-                        ${m.photo ? `<img src="${m.photo}" class="memory-photo-view">` : ''}
-                        ${m.audio ? `<audio controls src="${m.audio}" class="memory-audio-view"></audio>` : ''}
-                        <div style="font-size:0.75rem; color:var(--text-sub); margin-top:8px;">📅 Date : ${m.date}</div>
-                        <div>
-                            <button type="button" class="btn-delete-item" onclick="deleteMemoryById('${m.id}')">🗑️ Supprimer ce souvenir</button>
-                        </div>
-                    `;
-                    mimaFeed.appendChild(card);
-                });
-            }
+            // Trier par date décroissante
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            // Rendu Babi
-            const babiFeed = document.getElementById('babiFeed');
-            babiFeed.innerHTML = '';
-            const babiList = memories.filter(m => m.kid === 'Babi');
-            if (babiList.length === 0) {
-                babiFeed.innerHTML = '<p style="text-align:center; color:#999; padding:20px;">Aucun souvenir pour Babi.</p>';
-            } else {
-                babiList.forEach(m => {
-                    const card = document.createElement('div');
-                    card.className = 'memory-card babi-card-left';
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <strong style="color:var(--babi-blue);">🩵 Babi</strong>
-                            <span class="age-badge">Âge : ${m.age}</span>
-                        </div>
-                        <h3 class="serif" style="font-size:1.4rem; margin:6px 0;">${escapeText(m.title)}</h3>
-                        ${m.story ? `<div class="memory-story">${escapeText(m.story)}</div>` : ''}
-                        ${m.photo ? `<img src="${m.photo}" class="memory-photo-view">` : ''}
-                        ${m.audio ? `<audio controls src="${m.audio}" class="memory-audio-view"></audio>` : ''}
-                        <div style="font-size:0.75rem; color:var(--text-sub); margin-top:8px;">📅 Date : ${m.date}</div>
-                        <div>
-                            <button type="button" class="btn-delete-item" onclick="deleteMemoryById('${m.id}')">🗑️ Supprimer ce souvenir</button>
-                        </div>
-                    `;
-                    babiFeed.appendChild(card);
-                });
-            }
+            // Grouper par Année -> Mois
+            const grouped = {};
+            filtered.forEach(item => {
+                const d = new Date(item.date);
+                const year = d.getFullYear();
+                const month = monthNames[d.getMonth()];
+                const monthKey = `${month} ${year}`;
 
-            // Rendu Capsules 18 ans
-            const capFeed = document.getElementById('capsuleFeed');
-            capFeed.innerHTML = '';
-            capsules.forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.style.borderLeft = "5px solid var(--gold-18)";
-                card.style.background = "var(--gold-light)";
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <strong style="color:var(--gold-18);">🔒 Capsule pour ${c.kid}</strong>
-                        <span class="age-badge">18 Ans</span>
-                    </div>
-                    <h3 class="serif" style="font-size:1.4rem; margin:6px 0;">${escapeText(c.title)}</h3>
-                    <div class="memory-story" style="background:#FFF; border:1px dashed #E5C58D; font-style:italic;">
-                        « ${escapeText(c.letter)} »
-                    </div>
-                    ${c.audio ? `<audio controls src="${c.audio}" class="memory-audio-view"></audio>` : ''}
-                    <div style="font-size:0.8rem; color:#A88438; margin-top:8px;">
-                        🔓 À ouvrir le : <strong>${c.unlockDate}</strong>
-                    </div>
-                    <div>
-                        <button type="button" class="btn-delete-item" onclick="deleteCapsuleById('${c.id}')">🗑️ Supprimer cette lettre</button>
-                    </div>
-                `;
-                capFeed.appendChild(card);
+                if (!grouped[year]) grouped[year] = {};
+                if (!grouped[year][monthKey]) grouped[year][monthKey] = [];
+                grouped[year][monthKey].push(item);
             });
+
+            container.innerHTML = '';
+
+            // Rendu HTML structuré
+            for (const year of Object.keys(grouped).sort((a, b) => b - a)) {
+                const yearBlock = document.createElement('div');
+                yearBlock.className = 'year-group';
+                yearBlock.innerHTML = `<h3 class="year-title serif">📅 Année ${year}</h3>`;
+
+                for (const [monthName, items] of Object.entries(grouped[year])) {
+                    const monthBlock = document.createElement('div');
+                    monthBlock.className = 'month-group';
+                    
+                    let rowsHTML = '';
+                    items.forEach(m => {
+                        const edgeClass = (m.kid === 'Mima') ? 'mima-edge' : 'babi-edge';
+                        const tagClass = (m.kid === 'Mima') ? 'tag-mima' : 'tag-babi';
+                        const kidEmoji = (m.kid === 'Mima') ? '🌸 Mima' : '🩵 Babi';
+
+                        rowsHTML += `
+                            <div class="memory-row ${edgeClass}">
+                                <div class="row-meta">
+                                    <span class="badge-kid-tag ${tagClass}">${kidEmoji}</span>
+                                    <span style="font-weight:700; color:#888;">Âge : ${m.age}</span>
+                                </div>
+                                <h4 class="serif" style="font-size:1.3rem; margin:4px 0;">${cleanTxt(m.title)}</h4>
+                                ${m.story ? `<div class="row-story">${cleanTxt(m.story)}</div>` : ''}
+                                ${m.photo ? `<img src="${m.photo}" class="row-photo">` : ''}
+                                ${m.audio ? `<audio controls src="${m.audio}" class="row-audio"></audio>` : ''}
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                                    <span style="font-size:0.75rem; color:#999;">📅 ${m.date}</span>
+                                    <button type="button" class="btn-delete-row" onclick="deleteMemory('${m.id}')">🗑️ Supprimer</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    monthBlock.innerHTML = `
+                        <div class="month-header">
+                            <span>🗓️ ${monthName}</span>
+                            <span style="font-size:0.8rem; font-weight:normal; color:#888;">${items.length} souvenir(s)</span>
+                        </div>
+                        ${rowsHTML}
+                    `;
+                    yearBlock.appendChild(monthBlock);
+                }
+                container.appendChild(yearBlock);
+            }
         }
 
-        function escapeText(str) {
+        // 9. OUVERTURE DU COFFRE PRIVÉ (100% SÉCURISÉ POUR UN SEUL ENFANT)
+        function openChildVault(kid) {
+            document.getElementById('normalSiteView').style.display = 'none';
+            document.getElementById('mainHeader').style.display = 'none';
+            const vaultView = document.getElementById('privateVaultView');
+            vaultView.style.display = 'block';
+
+            const title = (kid === 'Mima') ? 'Le Coffre Secret de Mima 🌸' : 'Le Coffre Secret de Babi 🩵';
+            const unlock = (kid === 'Mima') ? 'Ouverture officielle : 28 Mai 2041 (Tes 18 Ans)' : 'Ouverture officielle : 22 Octobre 2043 (Tes 18 Ans)';
+            
+            document.getElementById('vaultChildTitle').textContent = title;
+            document.getElementById('vaultUnlockSubtitle').textContent = unlock;
+
+            const storageKey = (kid === 'Mima') ? 'vault_18_mima_secret' : 'vault_18_babi_secret';
+            let letters = getLocal(storageKey);
+
+            if (letters.length === 0) {
+                letters = [{
+                    id: 'demo_1',
+                    title: 'Lettre pour tes 18 ans',
+                    letter: `Mon cher petit ange ${kid}, que ce message te rappelle pour toujours l'amour immense qui t'entoure depuis ton premier souffle.`,
+                    audio: null,
+                    dateAdded: 'Scellé avec amour'
+                }];
+            }
+
+            const listContainer = document.getElementById('vaultLettersList');
+            listContainer.innerHTML = '';
+
+            letters.forEach(item => {
+                const card = document.createElement('div');
+                card.style.background = "#FCFAF8";
+                card.style.border = "1px dashed #E5C58D";
+                card.style.borderRadius = "14px";
+                card.style.padding = "16px";
+                card.style.marginBottom = "15px";
+                card.style.textAlign = "left";
+
+                card.innerHTML = `
+                    <h3 class="serif" style="font-size:1.4rem; color:var(--gold-18); margin-bottom:8px;">${cleanTxt(item.title)}</h3>
+                    <div style="background:#FFF; padding:12px; border-radius:8px; border:1px solid #EFE7DC; font-style:italic; line-height:1.5;">
+                        « ${cleanTxt(item.letter)} »
+                    </div>
+                    ${item.audio ? `<audio controls src="${item.audio}" style="width:100%; height:38px; margin-top:10px;"></audio>` : ''}
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                        <span style="font-size:0.75rem; color:#999;">🔒 Ajouté le : ${item.dateAdded}</span>
+                        <button type="button" class="btn-delete-row" onclick="deleteSecretLetter('${item.id}', '${kid}')">🗑️ Supprimer</button>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function exitVault() {
+            document.getElementById('privateVaultView').style.display = 'none';
+            document.getElementById('normalSiteView').style.display = 'block';
+            document.getElementById('mainHeader').style.display = 'block';
+            renderTableau();
+        }
+
+        function updateSecretLinksDisplay() {
+            const baseUrl = window.location.origin + window.location.pathname;
+            document.getElementById('linkMimaDisplay').textContent = baseUrl + '?vault=mima';
+            document.getElementById('linkBabiDisplay').textContent = baseUrl + '?vault=babi';
+        }
+
+        // 10. STOCKAGE & UTILITAIRES
+        function getLocal(key) {
+            try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; }
+        }
+        function setLocal(key, val) {
+            try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+        }
+        function cleanTxt(str) {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, t => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[t] || t));
         }
-
-        // Lancement direct
-        renderFeed();
     </script>
 </body>
 </html>
