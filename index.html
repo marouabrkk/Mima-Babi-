@@ -62,18 +62,17 @@
             margin-bottom: 20px;
         }
 
-        .cloud-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #E8F5E9;
-            color: #2E7D32;
-            font-size: 0.75rem;
+        .header-tag {
+            display: inline-block;
+            background: var(--bg-body);
+            color: var(--terracotta);
+            font-size: 0.82rem;
             font-weight: 700;
-            padding: 4px 12px;
+            padding: 5px 15px;
             border-radius: 20px;
+            border: 1px solid var(--border);
             margin-bottom: 8px;
-            border: 1px solid #C8E6C9;
+            letter-spacing: 0.5px;
         }
 
         .header-title {
@@ -424,7 +423,7 @@
     <!-- EN-TÊTE -->
     <header class="site-header" id="mainHeader">
         <div class="container">
-            <span class="cloud-badge">☁️ Synchronisé en direct (Cloud Google)</span><br>
+            <span class="header-tag">❤️ POUR MA SŒUR KHADIJA</span><br>
             <h1 class="header-title serif">Le Coffre aux Souvenirs</h1>
             <p class="header-subtitle">Les Trésors de Mima & Babi</p>
         </div>
@@ -605,9 +604,7 @@
     </div>
 
     <script>
-        // =========================================================
-        // CONFIGURATION FIREBASE CLOUD OFFICIELLE
-        // =========================================================
+        // CONFIGURATION FIREBASE CLOUD
         const firebaseConfig = {
             apiKey: "AIzaSyBajSnvGZ34HYRXXI2zPoYqT30yyLF7MqU",
             authDomain: "souvenirs-khadija.firebaseapp.com",
@@ -621,7 +618,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // DATES OFFICIELLES
         const birthDates = {
             'Mima': new Date(2023, 4, 28),
             'Babi': new Date(2025, 9, 22)
@@ -652,7 +648,7 @@
             document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
         } catch(e) {}
 
-        // ECOUTE DES SOUVENIRS EN DIRECT DEPUIS LE CLOUD (TEMPS RÉEL)
+        // SYNCHRONISATION EN DIRECT
         db.collection('memories').onSnapshot((snapshot) => {
             globalMemoriesList = [];
             snapshot.forEach(doc => {
@@ -665,7 +661,7 @@
             console.error("Erreur Cloud:", error);
         });
 
-        // ROUTAGE PAR LIEN SECRET (?vault=mima ou ?vault=babi)
+        // ROUTAGE PAR LIEN SECRET
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const vault = urlParams.get('vault');
@@ -793,7 +789,7 @@
             }
         }
 
-        // COMPRESSION & APERÇU PHOTO OPTIMISÉ POUR CLOUD
+        // COMPRESSION PHOTO
         function handlePhotoPreview(event) {
             const file = event.target.files[0];
             if (file) {
@@ -829,7 +825,7 @@
             }
         }
 
-        // SAUVEGARDE DANS LE CLOUD FIREBASE (TABLEAU SOUVENIR)
+        // SAUVEGARDE SOUVENIR
         async function saveGeneralMemory(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('genSubmitBtn');
@@ -873,7 +869,7 @@
             submitBtn.disabled = false;
         }
 
-        // SAUVEGARDE SECRÈTE 18 ANS DANS LE CLOUD FIREBASE
+        // SAUVEGARDE SECRÈTE 18 ANS
         async function saveSecret18Message(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('capSubmitBtn');
@@ -909,7 +905,7 @@
             submitBtn.disabled = false;
         }
 
-        // SUPPRESSION SUR LE CLOUD
+        // SUPPRESSION CLOUD
         async function deleteMemory(id) {
             if (confirm("Supprimer définitivement ce souvenir sur tous les appareils ?")) {
                 try {
@@ -932,7 +928,7 @@
             }
         }
 
-        // AFFICHAGE TABLEAU PAR ANNÉE ET MOIS
+        // AFFICHAGE DU TABLEAU
         function filterTable(kid, btnEl) {
             tableFilter = kid;
             document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
@@ -1011,7 +1007,7 @@
             }
         }
 
-        // OUVERTURE DU COFFRE PRIVÉ (RÉCUPÉRÉ DU CLOUD)
+        // COFFRE PRIVÉ
         async function openChildVault(kid) {
             document.getElementById('normalSiteView').style.display = 'none';
             document.getElementById('mainHeader').style.display = 'none';
