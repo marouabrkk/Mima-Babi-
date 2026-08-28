@@ -8,8 +8,11 @@
     <!-- Polices Élégantes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&family=Sacramento&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <!-- SDK Google Firebase (Cloud & Synchronisation en temps réel) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
@@ -43,7 +46,6 @@
         }
 
         .serif { font-family: 'Playfair Display', serif; }
-        .handwritten { font-family: 'Sacramento', cursive; }
 
         .container {
             max-width: 750px;
@@ -60,16 +62,18 @@
             margin-bottom: 20px;
         }
 
-        .header-tag {
-            display: inline-block;
-            background: var(--bg-body);
-            color: var(--terracotta);
-            font-size: 0.8rem;
+        .cloud-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            font-size: 0.75rem;
             font-weight: 700;
-            padding: 4px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
-            border: 1px solid var(--border);
             margin-bottom: 8px;
+            border: 1px solid #C8E6C9;
         }
 
         .header-title {
@@ -119,13 +123,8 @@
             background: var(--gold-18);
         }
 
-        .tab-panel {
-            display: none;
-        }
-
-        .tab-panel.active-panel {
-            display: block;
-        }
+        .tab-panel { display: none; }
+        .tab-panel.active-panel { display: block; }
 
         /* FORMULAIRES */
         .form-card {
@@ -137,9 +136,7 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.03);
         }
 
-        .form-row {
-            margin-bottom: 16px;
-        }
+        .form-row { margin-bottom: 16px; }
 
         .form-label {
             display: block;
@@ -246,9 +243,7 @@
             box-shadow: 0 6px 20px rgba(211, 115, 83, 0.25);
         }
 
-        /* ===================================================
-           TABLEAU ORGANISÉ PAR ANNÉE ET MOIS
-           =================================================== */
+        /* TABLEAU CHRONOLOGIQUE */
         .filter-header {
             display: flex;
             justify-content: space-between;
@@ -258,10 +253,7 @@
             gap: 10px;
         }
 
-        .filter-chips {
-            display: flex;
-            gap: 6px;
-        }
+        .filter-chips { display: flex; gap: 6px; }
 
         .chip-btn {
             background: #FFFFFF;
@@ -280,9 +272,7 @@
             border-color: var(--text-dark);
         }
 
-        .year-group {
-            margin-bottom: 30px;
-        }
+        .year-group { margin-bottom: 30px; }
 
         .year-title {
             font-size: 1.8rem;
@@ -290,9 +280,6 @@
             border-bottom: 2px solid var(--border);
             padding-bottom: 6px;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .month-group {
@@ -320,10 +307,7 @@
             border-bottom: 1px solid var(--border);
             position: relative;
         }
-
-        .memory-row:last-child {
-            border-bottom: none;
-        }
+        .memory-row:last-child { border-bottom: none; }
 
         .memory-row.mima-edge { border-left: 5px solid var(--mima-pink); }
         .memory-row.babi-edge { border-left: 5px solid var(--babi-blue); }
@@ -378,9 +362,7 @@
             margin-top: 10px;
         }
 
-        /* ===================================================
-           ESPACE SECRETS 18 ANS & LIENS INDIVIDUELS
-           =================================================== */
+        /* SECRETS 18 ANS */
         .secret-portal-card {
             background: var(--gold-bg);
             border: 2px solid #E5C58D;
@@ -410,7 +392,7 @@
             margin-top: 8px;
         }
 
-        /* VUE DU COFFRE PRIVÉ D'UN ENFANT */
+        /* COFFRE PRIVÉ */
         #privateVaultView {
             display: none;
             background: #FFFFFF;
@@ -439,19 +421,19 @@
 </head>
 <body>
 
-    <!-- EN-TÊTE DU SITE -->
+    <!-- EN-TÊTE -->
     <header class="site-header" id="mainHeader">
         <div class="container">
-            <span class="header-tag">❤️ POUR MA SŒUR KHADIJA</span>
+            <span class="cloud-badge">☁️ Synchronisé en direct (Cloud Google)</span><br>
             <h1 class="header-title serif">Le Coffre aux Souvenirs</h1>
-            <p class="header-subtitle">Les Trésors de Mima (2023) & Babi (2025)</p>
+            <p class="header-subtitle">Les Trésors de Mima & Babi</p>
         </div>
     </header>
 
     <div class="container">
 
         <!-- ========================================================
-             VUE DU COFFRE PRIVÉ SECRET (S'active avec le lien privé)
+             VUE DU COFFRE PRIVÉ (LIEN SECRET ?vault=mima ou ?vault=babi)
              ======================================================== -->
         <section id="privateVaultView">
             <div class="wax-lock">🔒</div>
@@ -459,32 +441,29 @@
             <p id="vaultUnlockSubtitle" style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; margin-bottom: 20px;"></p>
 
             <div id="vaultLettersList">
-                <!-- Seules les lettres de cet enfant s'affichent ici -->
+                <p style="color:#888;">Chargement de vos lettres secrètes...</p>
             </div>
 
             <div style="margin-top: 25px;">
                 <button type="button" onclick="exitVault()" style="background: transparent; border: 1px solid var(--border); padding: 8px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; color: var(--text-muted);">
-                    ← Retourner au site de souvenirs
+                    ← Retourner au site principal
                 </button>
             </div>
         </section>
 
 
         <!-- ========================================================
-             VUE NORMALE DU SITE (3 ONGLETS)
+             VUE PRINCIPALE DU SITE
              ======================================================== -->
         <div id="normalSiteView">
 
-            <!-- BARRE DE NAVIGATION -->
             <nav class="main-nav">
                 <button type="button" class="nav-btn active" onclick="switchNav('panelTable', this)">📊 Tableau Chronologique</button>
                 <button type="button" class="nav-btn" onclick="switchNav('panelAdd', this)">➕ Nouveau Souvenir</button>
                 <button type="button" class="nav-btn tab-gold" onclick="switchNav('panel18Secret', this)">🔒 Secrets 18 Ans</button>
             </nav>
 
-            <!-- ----------------------------------------------------
-                 1. TABLEAU CHRONOLOGIQUE DES SOUVENIRS (PAR AN & MOIS)
-                 ---------------------------------------------------- -->
+            <!-- 1. TABLEAU CHRONOLOGIQUE -->
             <section id="panelTable" class="tab-panel active-panel">
                 <div class="filter-header">
                     <h2 class="serif" style="font-size: 1.6rem;">Le Grand Registre</h2>
@@ -496,14 +475,11 @@
                 </div>
 
                 <div id="timelineTableContainer">
-                    <!-- Généré automatiquement par Année et Mois -->
+                    <p style="text-align:center; color:#888; padding:30px;">Chargement des souvenirs du Cloud...</p>
                 </div>
             </section>
 
-
-            <!-- ----------------------------------------------------
-                 2. AJOUTER UN NOUVEAU SOUVENIR
-                 ---------------------------------------------------- -->
+            <!-- 2. AJOUTER UN SOUVENIR -->
             <section id="panelAdd" class="tab-panel">
                 <div class="form-card">
                     <h2 class="serif" style="font-size: 1.6rem; text-align: center; margin-bottom: 15px;">Ajouter un Souvenir</h2>
@@ -552,15 +528,12 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-submit">💾 Enregistrer dans le tableau</button>
+                        <button type="submit" id="genSubmitBtn" class="btn-submit">💾 Enregistrer et synchroniser</button>
                     </form>
                 </div>
             </section>
 
-
-            <!-- ----------------------------------------------------
-                 3. SECRETS 18 ANS (DÉPÔT ET LIENS PRIVÉS)
-                 ---------------------------------------------------- -->
+            <!-- 3. SECRETS 18 ANS -->
             <section id="panel18Secret" class="tab-panel">
                 <div class="secret-portal-card">
                     <div style="font-size: 2rem; text-align: center;">🔒</div>
@@ -569,10 +542,10 @@
                     </h2>
                     <p style="font-size: 0.88rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
                         Ces messages ne sont <strong>JAMAIS visibles</strong> sur cette page.<br>
-                        Chaque enfant possède son propre lien privé et secret.
+                        Chaque enfant possède son propre lien privé.
                     </p>
 
-                    <!-- Les 2 Liens Privés pour Khadija -->
+                    <!-- Liens Privés -->
                     <div class="secret-link-box">
                         <strong style="color: var(--mima-pink);">🌸 Lien Secret pour MIMA (18 ans en 2041) :</strong>
                         <div style="font-size: 0.8rem; color: #666; word-break: break-all; margin: 4px 0;" id="linkMimaDisplay">...</div>
@@ -586,7 +559,7 @@
                     </div>
                 </div>
 
-                <!-- Formulaire de Dépôt Secret -->
+                <!-- Formulaire Secret -->
                 <div class="form-card" style="border: 2px solid #E5C58D;">
                     <h3 class="serif" style="font-size: 1.4rem; text-align: center; margin-bottom: 12px; color: var(--gold-18);">
                         ✉️ Déposer un Message Secret
@@ -621,8 +594,8 @@
                             <audio id="capAudioPreview" controls style="display: none; width: 100%; margin-top: 10px;"></audio>
                         </div>
 
-                        <button type="submit" class="btn-submit" style="background: var(--gold-18);">
-                            🔒 Sceller dans son coffre personnel
+                        <button type="submit" id="capSubmitBtn" class="btn-submit" style="background: var(--gold-18);">
+                            🔒 Sceller dans le Cloud sécurisé
                         </button>
                     </form>
                 </div>
@@ -632,10 +605,26 @@
     </div>
 
     <script>
+        // =========================================================
+        // CONFIGURATION FIREBASE CLOUD OFFICIELLE
+        // =========================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBajSnvGZ34HYRXXI2zPoYqT30yyLF7MqU",
+            authDomain: "souvenirs-khadija.firebaseapp.com",
+            projectId: "souvenirs-khadija",
+            storageBucket: "souvenirs-khadija.firebasestorage.app",
+            messagingSenderId: "855080651612",
+            appId: "1:855080651612:web:f051677817abb2c1614f99",
+            measurementId: "G-SEBDCKVCYQ"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // DATES OFFICIELLES
         const birthDates = {
-            'Mima': new Date(2023, 4, 28), // 28 mai 2023
-            'Babi': new Date(2025, 9, 22)  // 22 oct 2025
+            'Mima': new Date(2023, 4, 28),
+            'Babi': new Date(2025, 9, 22)
         };
 
         const monthNames = [
@@ -657,12 +646,26 @@
         let timerInterval = null;
         let elapsedSeconds = 0;
 
-        // Date du jour par défaut
+        let globalMemoriesList = [];
+
         try {
             document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
         } catch(e) {}
 
-        // VÉRIFICATION D'UN ACCÈS DIRECT PAR LIEN SECRET (?vault=Mima ou ?vault=Babi)
+        // ECOUTE DES SOUVENIRS EN DIRECT DEPUIS LE CLOUD (TEMPS RÉEL)
+        db.collection('memories').onSnapshot((snapshot) => {
+            globalMemoriesList = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                data.id = doc.id;
+                globalMemoriesList.push(data);
+            });
+            renderTableau();
+        }, (error) => {
+            console.error("Erreur Cloud:", error);
+        });
+
+        // ROUTAGE PAR LIEN SECRET (?vault=mima ou ?vault=babi)
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const vault = urlParams.get('vault');
@@ -671,12 +674,10 @@
             } else if (vault === 'babi' || vault === 'Babi') {
                 openChildVault('Babi');
             } else {
-                renderTableau();
                 updateSecretLinksDisplay();
             }
         });
 
-        // 1. CHANGEMENT D'ONGLET PRINCIPAL
         function switchNav(panelId, btnElement) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active-panel'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -702,7 +703,6 @@
             document.getElementById('btnCapBabi').className = (kid === 'Babi') ? 'kid-btn active-babi' : 'kid-btn';
         }
 
-        // 2. CALCUL DE L'ÂGE
         function calculateAge(kid, dateStr) {
             try {
                 const bDate = birthDates[kid];
@@ -727,12 +727,10 @@
                 if (years === 0) return `${months} mois`;
                 if (months === 0) return `${years} an${years > 1 ? 's' : ''}`;
                 return `${years} an${years > 1 ? 's' : ''} et ${months} mois`;
-            } catch(e) {
-                return '';
-            }
+            } catch(e) { return ''; }
         }
 
-        // 3. ENREGISTREUR AUDIO ROBUSTE
+        // ENREGISTREUR VOCAL
         async function handleVoiceRecord(mode) {
             const btn = document.getElementById(mode + 'MicBtn');
             const status = document.getElementById(mode + 'MicStatus');
@@ -741,7 +739,7 @@
 
             if (!isRecording) {
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert("Autorisez l'accès au micro dans votre navigateur pour enregistrer !");
+                    alert("Autorisez l'accès au micro dans votre navigateur !");
                     return;
                 }
 
@@ -795,23 +793,48 @@
             }
         }
 
-        // 4. APERÇU PHOTO
+        // COMPRESSION & APERÇU PHOTO OPTIMISÉ POUR CLOUD
         function handlePhotoPreview(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = ev => {
-                    currentGenPhotoData = ev.target.result;
-                    document.getElementById('genPhotoImg').src = currentGenPhotoData;
-                    document.getElementById('genPhotoBox').style.display = 'block';
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 800;
+
+                        if (width > height && width > maxDim) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else if (height > maxDim) {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        currentGenPhotoData = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById('genPhotoImg').src = currentGenPhotoData;
+                        document.getElementById('genPhotoBox').style.display = 'block';
+                    };
+                    img.src = ev.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // 5. SAUVEGARDE SOUVENIR DANS LE TABLEAU
-        function saveGeneralMemory(e) {
+        // SAUVEGARDE DANS LE CLOUD FIREBASE (TABLEAU SOUVENIR)
+        async function saveGeneralMemory(e) {
             e.preventDefault();
+            const submitBtn = document.getElementById('genSubmitBtn');
+            submitBtn.textContent = "⏳ Synchronisation avec le Cloud...";
+            submitBtn.disabled = true;
 
             const title = document.getElementById('genTitle').value.trim();
             const date = document.getElementById('genDate').value;
@@ -819,82 +842,97 @@
             const ageCalculated = calculateAge(currentKidChoice, date);
 
             const newMemory = {
-                id: 'mem_' + Date.now(),
                 kid: currentKidChoice,
                 title: title,
                 date: date,
                 age: ageCalculated,
                 story: story,
                 photo: currentGenPhotoData,
-                audio: currentGenAudioData
+                audio: currentGenAudioData,
+                createdAt: Date.now()
             };
 
-            let memories = getLocal('khadija_timeline_memories');
-            memories.unshift(newMemory);
-            setLocal('khadija_timeline_memories', memories);
+            try {
+                await db.collection('memories').add(newMemory);
 
-            // Reset
-            document.getElementById('formGeneral').reset();
-            currentGenPhotoData = null;
-            currentGenAudioData = null;
-            document.getElementById('genPhotoBox').style.display = 'none';
-            document.getElementById('genAudioPreview').style.display = 'none';
-            document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
-            document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('formGeneral').reset();
+                currentGenPhotoData = null;
+                currentGenAudioData = null;
+                document.getElementById('genPhotoBox').style.display = 'none';
+                document.getElementById('genAudioPreview').style.display = 'none';
+                document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
+                document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
 
-            alert("Souvenir ajouté au tableau ! ❤️");
-            switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
+                alert("Souvenir enregistré et synchronisé sur tous les téléphones ! ☁️❤️");
+                switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
+            } catch (err) {
+                alert("Erreur Cloud : Avez-vous activé Firestore en Mode Test sur Firebase ?");
+            }
+
+            submitBtn.textContent = "💾 Enregistrer et synchroniser";
+            submitBtn.disabled = false;
         }
 
-        // 6. SAUVEGARDE SECRÈTE 18 ANS (Stocké dans des tiroirs complètement séparés)
-        function saveSecret18Message(e) {
+        // SAUVEGARDE SECRÈTE 18 ANS DANS LE CLOUD FIREBASE
+        async function saveSecret18Message(e) {
             e.preventDefault();
+            const submitBtn = document.getElementById('capSubmitBtn');
+            submitBtn.textContent = "⏳ Scellement dans le Cloud...";
+            submitBtn.disabled = true;
 
             const title = document.getElementById('capTitle').value.trim();
             const letter = document.getElementById('capLetter').value.trim();
-            const storageKey = (currentCapChoice === 'Mima') ? 'vault_18_mima_secret' : 'vault_18_babi_secret';
+            const collectionName = (currentCapChoice === 'Mima') ? 'secrets_mima' : 'secrets_babi';
 
             const newLetter = {
-                id: 'sec_' + Date.now(),
                 title: title,
                 letter: letter,
                 audio: currentCapAudioData,
-                dateAdded: new Date().toLocaleDateString('fr-FR')
+                dateAdded: new Date().toLocaleDateString('fr-FR'),
+                createdAt: Date.now()
             };
 
-            let vaultList = getLocal(storageKey);
-            vaultList.unshift(newLetter);
-            setLocal(storageKey, vaultList);
+            try {
+                await db.collection(collectionName).add(newLetter);
 
-            document.getElementById('form18Secret').reset();
-            currentCapAudioData = null;
-            document.getElementById('capAudioPreview').style.display = 'none';
-            document.getElementById('capMicStatus').textContent = "Appuyez pour enregistrer";
+                document.getElementById('form18Secret').reset();
+                currentCapAudioData = null;
+                document.getElementById('capAudioPreview').style.display = 'none';
+                document.getElementById('capMicStatus').textContent = "Appuyez pour enregistrer";
 
-            alert("Message scellé avec succès dans le coffre secret de " + currentCapChoice + " ! 🔒");
+                alert("Message scellé avec succès dans le Cloud secret de " + currentCapChoice + " ! 🔒");
+            } catch(err) {
+                alert("Erreur Cloud : Vérifiez le mode test de Firestore.");
+            }
+
+            submitBtn.textContent = "🔒 Sceller dans le Cloud sécurisé";
+            submitBtn.disabled = false;
         }
 
-        // 7. SUPPRESSIONS SÉCURISÉES
-        function deleteMemory(id) {
-            if (confirm("Supprimer ce souvenir du tableau ?")) {
-                let list = getLocal('khadija_timeline_memories');
-                list = list.filter(m => m.id !== id);
-                setLocal('khadija_timeline_memories', list);
-                renderTableau();
+        // SUPPRESSION SUR LE CLOUD
+        async function deleteMemory(id) {
+            if (confirm("Supprimer définitivement ce souvenir sur tous les appareils ?")) {
+                try {
+                    await db.collection('memories').doc(id).delete();
+                } catch(e) {
+                    alert("Erreur lors de la suppression.");
+                }
             }
         }
 
-        function deleteSecretLetter(id, kid) {
+        async function deleteSecretLetter(id, kid) {
             if (confirm("Supprimer définitivement cette lettre secrète ?")) {
-                const storageKey = (kid === 'Mima') ? 'vault_18_mima_secret' : 'vault_18_babi_secret';
-                let list = getLocal(storageKey);
-                list = list.filter(item => item.id !== id);
-                setLocal(storageKey, list);
-                openChildVault(kid);
+                const collectionName = (kid === 'Mima') ? 'secrets_mima' : 'secrets_babi';
+                try {
+                    await db.collection(collectionName).doc(id).delete();
+                    openChildVault(kid);
+                } catch(e) {
+                    alert("Erreur lors de la suppression.");
+                }
             }
         }
 
-        // 8. AFFICHAGE DU GRAND TABLEAU PAR ANNÉE ET PAR MOIS
+        // AFFICHAGE TABLEAU PAR ANNÉE ET MOIS
         function filterTable(kid, btnEl) {
             tableFilter = kid;
             document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
@@ -904,45 +942,15 @@
 
         function renderTableau() {
             const container = document.getElementById('timelineTableContainer');
-            let memories = getLocal('khadija_timeline_memories');
-
-            // Données d'exemple initiales
-            if (memories.length === 0) {
-                memories = [
-                    {
-                        id: 'mem_1',
-                        kid: 'Mima',
-                        title: 'Premier éclat de rire',
-                        date: '2024-03-15',
-                        age: calculateAge('Mima', '2024-03-15'),
-                        story: 'Elle riait tellement fort avec son doudou !',
-                        photo: null,
-                        audio: null
-                    },
-                    {
-                        id: 'mem_2',
-                        kid: 'Babi',
-                        title: 'Premiers babillages',
-                        date: '2026-02-10',
-                        age: calculateAge('Babi', '2026-02-10'),
-                        story: 'Il gazouille tous les matins au réveil.',
-                        photo: null,
-                        audio: null
-                    }
-                ];
-            }
-
-            const filtered = memories.filter(m => (tableFilter === 'all' || m.kid === tableFilter));
+            const filtered = globalMemoriesList.filter(m => (tableFilter === 'all' || m.kid === tableFilter));
 
             if (filtered.length === 0) {
-                container.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Aucun souvenir enregistré dans cette catégorie.</div>';
+                container.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Aucun souvenir enregistré pour le moment. Ajoutez le premier !</div>';
                 return;
             }
 
-            // Trier par date décroissante
             filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            // Grouper par Année -> Mois
             const grouped = {};
             filtered.forEach(item => {
                 const d = new Date(item.date);
@@ -957,7 +965,6 @@
 
             container.innerHTML = '';
 
-            // Rendu HTML structuré
             for (const year of Object.keys(grouped).sort((a, b) => b - a)) {
                 const yearBlock = document.createElement('div');
                 yearBlock.className = 'year-group';
@@ -1004,8 +1011,8 @@
             }
         }
 
-        // 9. OUVERTURE DU COFFRE PRIVÉ (100% SÉCURISÉ POUR UN SEUL ENFANT)
-        function openChildVault(kid) {
+        // OUVERTURE DU COFFRE PRIVÉ (RÉCUPÉRÉ DU CLOUD)
+        async function openChildVault(kid) {
             document.getElementById('normalSiteView').style.display = 'none';
             document.getElementById('mainHeader').style.display = 'none';
             const vaultView = document.getElementById('privateVaultView');
@@ -1017,44 +1024,45 @@
             document.getElementById('vaultChildTitle').textContent = title;
             document.getElementById('vaultUnlockSubtitle').textContent = unlock;
 
-            const storageKey = (kid === 'Mima') ? 'vault_18_mima_secret' : 'vault_18_babi_secret';
-            let letters = getLocal(storageKey);
-
-            if (letters.length === 0) {
-                letters = [{
-                    id: 'demo_1',
-                    title: 'Lettre pour tes 18 ans',
-                    letter: `Mon cher petit ange ${kid}, que ce message te rappelle pour toujours l'amour immense qui t'entoure depuis ton premier souffle.`,
-                    audio: null,
-                    dateAdded: 'Scellé avec amour'
-                }];
-            }
-
             const listContainer = document.getElementById('vaultLettersList');
-            listContainer.innerHTML = '';
+            listContainer.innerHTML = '<p style="color:#888;">Chargement de vos lettres secrètes...</p>';
 
-            letters.forEach(item => {
-                const card = document.createElement('div');
-                card.style.background = "#FCFAF8";
-                card.style.border = "1px dashed #E5C58D";
-                card.style.borderRadius = "14px";
-                card.style.padding = "16px";
-                card.style.marginBottom = "15px";
-                card.style.textAlign = "left";
+            const collectionName = (kid === 'Mima') ? 'secrets_mima' : 'secrets_babi';
+            try {
+                const snapshot = await db.collection(collectionName).orderBy('createdAt', 'desc').get();
+                listContainer.innerHTML = '';
 
-                card.innerHTML = `
-                    <h3 class="serif" style="font-size:1.4rem; color:var(--gold-18); margin-bottom:8px;">${cleanTxt(item.title)}</h3>
-                    <div style="background:#FFF; padding:12px; border-radius:8px; border:1px solid #EFE7DC; font-style:italic; line-height:1.5;">
-                        « ${cleanTxt(item.letter)} »
-                    </div>
-                    ${item.audio ? `<audio controls src="${item.audio}" style="width:100%; height:38px; margin-top:10px;"></audio>` : ''}
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                        <span style="font-size:0.75rem; color:#999;">🔒 Ajouté le : ${item.dateAdded}</span>
-                        <button type="button" class="btn-delete-row" onclick="deleteSecretLetter('${item.id}', '${kid}')">🗑️ Supprimer</button>
-                    </div>
-                `;
-                listContainer.appendChild(card);
-            });
+                if (snapshot.empty) {
+                    listContainer.innerHTML = '<p style="color:#888; padding:20px;">Aucune lettre secrète déposée pour l\'instant.</p>';
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const item = doc.data();
+                    const card = document.createElement('div');
+                    card.style.background = "#FCFAF8";
+                    card.style.border = "1px dashed #E5C58D";
+                    card.style.borderRadius = "14px";
+                    card.style.padding = "16px";
+                    card.style.marginBottom = "15px";
+                    card.style.textAlign = "left";
+
+                    card.innerHTML = `
+                        <h3 class="serif" style="font-size:1.4rem; color:var(--gold-18); margin-bottom:8px;">${cleanTxt(item.title)}</h3>
+                        <div style="background:#FFF; padding:12px; border-radius:8px; border:1px solid #EFE7DC; font-style:italic; line-height:1.5;">
+                            « ${cleanTxt(item.letter)} »
+                        </div>
+                        ${item.audio ? `<audio controls src="${item.audio}" style="width:100%; height:38px; margin-top:10px;"></audio>` : ''}
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                            <span style="font-size:0.75rem; color:#999;">🔒 Scellé le : ${item.dateAdded}</span>
+                            <button type="button" class="btn-delete-row" onclick="deleteSecretLetter('${doc.id}', '${kid}')">🗑️ Supprimer</button>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            } catch(e) {
+                listContainer.innerHTML = '<p style="color:#D9534F;">Erreur lors du chargement des secrets.</p>';
+            }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1072,13 +1080,6 @@
             document.getElementById('linkBabiDisplay').textContent = baseUrl + '?vault=babi';
         }
 
-        // 10. STOCKAGE & UTILITAIRES
-        function getLocal(key) {
-            try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; }
-        }
-        function setLocal(key, val) {
-            try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
-        }
         function cleanTxt(str) {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, t => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[t] || t));
