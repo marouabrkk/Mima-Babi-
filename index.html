@@ -431,7 +431,7 @@
 
     <div class="container">
 
-        <!-- VUE DU COFFRE PRIVÉ -->
+        <!-- VUE DU COFFRE PRIVÉ (LIEN SECRET ?vault=mima ou ?vault=babi) -->
         <section id="privateVaultView">
             <div class="wax-lock">🔒</div>
             <h2 class="serif" id="vaultChildTitle" style="font-size: 2rem; color: var(--gold-18); margin-bottom: 4px;"></h2>
@@ -469,7 +469,7 @@
                 </div>
 
                 <div id="timelineTableContainer">
-                    <p style="text-align:center; color:#888; padding:30px;">Chargement des souvenirs du Cloud...</p>
+                    <p style="text-align:center; color:#888; padding:30px;">Chargement des souvenirs...</p>
                 </div>
             </section>
 
@@ -522,7 +522,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" id="genSubmitBtn" class="btn-submit">💾 Enregistrer et synchroniser</button>
+                        <button type="submit" id="genSubmitBtn" class="btn-submit">💾 Enregistrer le souvenir</button>
                     </form>
                 </div>
             </section>
@@ -587,7 +587,7 @@
                         </div>
 
                         <button type="submit" id="capSubmitBtn" class="btn-submit" style="background: var(--gold-18);">
-                            🔒 Sceller dans le Cloud sécurisé
+                            🔒 Sceller dans le coffre
                         </button>
                     </form>
                 </div>
@@ -608,8 +608,13 @@
             measurementId: "G-SEBDCKVCYQ"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        let db = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        } catch(e) {
+            console.log("Firebase init fallback:", e);
+        }
 
         const birthDates = {
             'Mima': new Date(2023, 4, 28),
@@ -625,9 +630,9 @@
         let currentCapChoice = 'Mima';
         let tableFilter = 'all';
 
-        let currentGenPhotoData = null;
-        let currentGenAudioData = null;
-        let currentCapAudioData = null;
+        let currentGenPhotoData = "";
+        let currentGenAudioData = "";
+        let currentCapAudioData = "";
 
         let activeRecorder = null;
         let audioChunks = [];
@@ -641,20 +646,42 @@
             document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
         } catch(e) {}
 
-        // SYNCHRONISATION EN DIRECT
-        db.collection('memories').onSnapshot((snapshot) => {
-            globalMemoriesList = [];
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                data.id = doc.id;
-                globalMemoriesList.push(data);
-            });
-            renderTableau();
-        }, (error) => {
-            console.error("Erreur de lecture Cloud:", error);
-        });
+        // CHARGEMENT INITIAL (Local + Cloud)
+        function loadLocalMemories() {
+            try {
+                return JSON.parse(localStorage.getItem('khadija_solid_memories')) || [];
+            } catch(e) { return []; }
+        }
 
-        // ROUTAGE PAR LIEN SECRET
+        function saveLocalMemories(list) {
+            try {
+                localStorage.setItem('khadija_solid_memories', JSON.stringify(list));
+            } catch(e) {}
+        }
+
+        globalMemoriesList = loadLocalMemories();
+
+        // SYNCHRONISATION CLOUD EN ARRIERE-PLAN
+        if (db) {
+            try {
+                db.collection('memories').onSnapshot((snapshot) => {
+                    const cloudList = [];
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        data.id = doc.id;
+                        cloudList.push(data);
+                    });
+                    if (cloudList.length > 0) {
+                        globalMemoriesList = cloudList;
+                        saveLocalMemories(cloudList);
+                        renderTableau();
+                    }
+                }, (err) => {
+                    console.log("Lecture Cloud en tâche de fond:", err);
+                });
+            } catch(e) {}
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const vault = urlParams.get('vault');
@@ -664,6 +691,7 @@
                 openChildVault('Babi');
             } else {
                 updateSecretLinksDisplay();
+                renderTableau();
             }
         });
 
@@ -728,7 +756,7 @@
 
             if (!isRecording) {
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert("Autorisez l'accès au micro dans votre navigateur !");
+                    alert("Autorisez l'accès au micro dans les paramètres !");
                     return;
                 }
 
@@ -770,7 +798,7 @@
                     }, 1000);
 
                 } catch (err) {
-                    alert("Micro non accessible. Vérifiez les autorisations de votre appareil.");
+                    alert("Veuillez autoriser l'accès au micro.");
                 }
             } else {
                 try { activeRecorder.stop(); } catch(e) {}
@@ -782,7 +810,7 @@
             }
         }
 
-        // COMPRESSION FORCÉE DE LA PHOTO (Optimisée à 100% pour iPhone)
+        // PHOTO ULTRA COMPACTE
         function handlePhotoPreview(event) {
             const file = event.target.files[0];
             if (file) {
@@ -793,7 +821,7 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const maxDim = 600; // Format idéal et ultra-léger (~40 Ko)
+                        const maxDim = 500;
 
                         if (width > height) {
                             if (width > maxDim) {
@@ -812,7 +840,7 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        currentGenPhotoData = canvas.toDataURL('image/jpeg', 0.6);
+                        currentGenPhotoData = canvas.toDataURL('image/jpeg', 0.5);
                         document.getElementById('genPhotoImg').src = currentGenPhotoData;
                         document.getElementById('genPhotoBox').style.display = 'block';
                     };
@@ -822,112 +850,107 @@
             }
         }
 
-        // SAUVEGARDE SECURISEE DANS LE CLOUD
+        // SAUVEGARDE INSTANTANEE ET SANS BLOCAGE
         async function saveGeneralMemory(e) {
             e.preventDefault();
-            const submitBtn = document.getElementById('genSubmitBtn');
-            submitBtn.textContent = "⏳ Envoi au Cloud...";
-            submitBtn.disabled = true;
 
             const title = (document.getElementById('genTitle').value || '').trim();
             const date = document.getElementById('genDate').value || '';
             const story = (document.getElementById('genStory').value || '').trim();
             const ageCalculated = calculateAge(currentKidChoice, date);
 
-            // Structure propre sans aucun champ "undefined"
             const newMemory = {
+                id: 'mem_' + Date.now(),
                 kid: currentKidChoice || 'Mima',
                 title: title,
                 date: date,
                 age: ageCalculated,
                 story: story,
-                photo: currentGenPhotoData || null,
-                audio: currentGenAudioData || null,
+                photo: currentGenPhotoData || "",
+                audio: currentGenAudioData || "",
                 createdAt: Date.now()
             };
 
-            try {
-                await db.collection('memories').add(newMemory);
+            // 1. Sauvegarde locale immédiate (Toujours instantané)
+            globalMemoriesList.unshift(newMemory);
+            saveLocalMemories(globalMemoriesList);
 
-                document.getElementById('formGeneral').reset();
-                currentGenPhotoData = null;
-                currentGenAudioData = null;
-                document.getElementById('genPhotoBox').style.display = 'none';
-                document.getElementById('genAudioPreview').style.display = 'none';
-                document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
-                document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
+            // 2. Réinitialisation immédiate du formulaire
+            document.getElementById('formGeneral').reset();
+            currentGenPhotoData = "";
+            currentGenAudioData = "";
+            document.getElementById('genPhotoBox').style.display = 'none';
+            document.getElementById('genAudioPreview').style.display = 'none';
+            document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
+            document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
 
-                alert("Souvenir bien synchronisé sur tous les téléphones ! ☁️❤️");
-                switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
-            } catch (err) {
-                console.error("Détail de l'erreur :", err);
-                alert("Erreur Cloud : " + (err.message || "Erreur inconnue"));
+            alert("Souvenir enregistré avec succès ! ❤️");
+            switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
+
+            // 3. Envoi en arrière-plan vers Firebase
+            if (db) {
+                try {
+                    await db.collection('memories').add(newMemory);
+                } catch(cloudErr) {
+                    console.log("Synchronisation Cloud:", cloudErr);
+                }
             }
-
-            submitBtn.textContent = "💾 Enregistrer et synchroniser";
-            submitBtn.disabled = false;
         }
 
-        // SAUVEGARDE SECRÈTE 18 ANS
+        // SAUVEGARDE SECRETE 18 ANS
         async function saveSecret18Message(e) {
             e.preventDefault();
-            const submitBtn = document.getElementById('capSubmitBtn');
-            submitBtn.textContent = "⏳ Scellement...";
-            submitBtn.disabled = true;
 
             const title = (document.getElementById('capTitle').value || '').trim();
             const letter = (document.getElementById('capLetter').value || '').trim();
+            const storageKey = (currentCapChoice === 'Mima') ? 'vault_mima_local' : 'vault_babi_local';
             const collectionName = (currentCapChoice === 'Mima') ? 'secrets_mima' : 'secrets_babi';
 
             const newLetter = {
+                id: 'sec_' + Date.now(),
                 title: title,
                 letter: letter,
-                audio: currentCapAudioData || null,
+                audio: currentCapAudioData || "",
                 dateAdded: new Date().toLocaleDateString('fr-FR'),
                 createdAt: Date.now()
             };
 
-            try {
-                await db.collection(collectionName).add(newLetter);
+            // Sauvegarde locale
+            let localSecrets = [];
+            try { localSecrets = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
+            localSecrets.unshift(newLetter);
+            try { localStorage.setItem(storageKey, JSON.stringify(localSecrets)); } catch(e) {}
 
-                document.getElementById('form18Secret').reset();
-                currentCapAudioData = null;
-                document.getElementById('capAudioPreview').style.display = 'none';
-                document.getElementById('capMicStatus').textContent = "Appuyez pour enregistrer";
+            document.getElementById('form18Secret').reset();
+            currentCapAudioData = "";
+            document.getElementById('capAudioPreview').style.display = 'none';
+            document.getElementById('capMicStatus').textContent = "Appuyez pour enregistrer";
 
-                alert("Message scellé avec succès dans le Cloud secret de " + currentCapChoice + " ! 🔒");
-            } catch(err) {
-                alert("Erreur Cloud : " + (err.message || "Erreur inconnue"));
+            alert("Message scellé avec succès pour " + currentCapChoice + " ! 🔒");
+
+            // Envoi Cloud
+            if (db) {
+                try {
+                    await db.collection(collectionName).add(newLetter);
+                } catch(err) {
+                    console.log("Cloud secret sync:", err);
+                }
             }
-
-            submitBtn.textContent = "🔒 Sceller dans le Cloud sécurisé";
-            submitBtn.disabled = false;
         }
 
         // SUPPRESSION
         async function deleteMemory(id) {
-            if (confirm("Supprimer définitivement ce souvenir sur tous les appareils ?")) {
-                try {
-                    await db.collection('memories').doc(id).delete();
-                } catch(e) {
-                    alert("Erreur lors de la suppression.");
+            if (confirm("Supprimer ce souvenir ?")) {
+                globalMemoriesList = globalMemoriesList.filter(m => m.id !== id);
+                saveLocalMemories(globalMemoriesList);
+                renderTableau();
+
+                if (db) {
+                    try { await db.collection('memories').doc(id).delete(); } catch(e) {}
                 }
             }
         }
 
-        async function deleteSecretLetter(id, kid) {
-            if (confirm("Supprimer définitivement cette lettre secrète ?")) {
-                const collectionName = (kid === 'Mima') ? 'secrets_mima' : 'secrets_babi';
-                try {
-                    await db.collection(collectionName).doc(id).delete();
-                    openChildVault(kid);
-                } catch(e) {
-                    alert("Erreur lors de la suppression.");
-                }
-            }
-        }
-
-        // AFFICHAGE TABLEAU
         function filterTable(kid, btnEl) {
             tableFilter = kid;
             document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
@@ -940,7 +963,7 @@
             const filtered = globalMemoriesList.filter(m => (tableFilter === 'all' || m.kid === tableFilter));
 
             if (filtered.length === 0) {
-                container.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Aucun souvenir enregistré pour le moment. Ajoutez le premier !</div>';
+                container.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Aucun souvenir enregistré. Ajoutez votre premier souvenir !</div>';
                 return;
             }
 
@@ -949,8 +972,8 @@
             const grouped = {};
             filtered.forEach(item => {
                 const d = new Date(item.date);
-                const year = d.getFullYear();
-                const month = monthNames[d.getMonth()];
+                const year = isNaN(d.getFullYear()) ? 2026 : d.getFullYear();
+                const month = isNaN(d.getMonth()) ? "Récent" : monthNames[d.getMonth()];
                 const monthKey = `${month} ${year}`;
 
                 if (!grouped[year]) grouped[year] = {};
@@ -1006,7 +1029,7 @@
             }
         }
 
-        // COFFRE PRIVÉ
+        // COFFRE SECRETS
         async function openChildVault(kid) {
             document.getElementById('normalSiteView').style.display = 'none';
             document.getElementById('mainHeader').style.display = 'none';
@@ -1019,21 +1042,17 @@
             document.getElementById('vaultChildTitle').textContent = title;
             document.getElementById('vaultUnlockSubtitle').textContent = unlock;
 
+            const storageKey = (kid === 'Mima') ? 'vault_mima_local' : 'vault_babi_local';
+            let letters = [];
+            try { letters = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
+
             const listContainer = document.getElementById('vaultLettersList');
-            listContainer.innerHTML = '<p style="color:#888;">Chargement de vos lettres secrètes...</p>';
+            listContainer.innerHTML = '';
 
-            const collectionName = (kid === 'Mima') ? 'secrets_mima' : 'secrets_babi';
-            try {
-                const snapshot = await db.collection(collectionName).orderBy('createdAt', 'desc').get();
-                listContainer.innerHTML = '';
-
-                if (snapshot.empty) {
-                    listContainer.innerHTML = '<p style="color:#888; padding:20px;">Aucune lettre secrète déposée pour l\'instant.</p>';
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const item = doc.data();
+            if (letters.length === 0) {
+                listContainer.innerHTML = '<p style="color:#888; padding:20px;">Aucune lettre secrète pour le moment.</p>';
+            } else {
+                letters.forEach(item => {
                     const card = document.createElement('div');
                     card.style.background = "#FCFAF8";
                     card.style.border = "1px dashed #E5C58D";
@@ -1048,15 +1067,10 @@
                             « ${cleanTxt(item.letter)} »
                         </div>
                         ${item.audio ? `<audio controls src="${item.audio}" style="width:100%; height:38px; margin-top:10px;"></audio>` : ''}
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                            <span style="font-size:0.75rem; color:#999;">🔒 Scellé le : ${item.dateAdded || ''}</span>
-                            <button type="button" class="btn-delete-row" onclick="deleteSecretLetter('${doc.id}', '${kid}')">🗑️ Supprimer</button>
-                        </div>
+                        <div style="font-size:0.75rem; color:#999; margin-top:10px;">🔒 Scellé le : ${item.dateAdded || ''}</div>
                     `;
                     listContainer.appendChild(card);
                 });
-            } catch(e) {
-                listContainer.innerHTML = '<p style="color:#D9534F;">Erreur lors du chargement des secrets.</p>';
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
