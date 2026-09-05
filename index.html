@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
-    <!-- SDK Google Firebase (Cloud & Synchronisation en temps réel) -->
+    <!-- SDK Google Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
@@ -431,9 +431,7 @@
 
     <div class="container">
 
-        <!-- ========================================================
-             VUE DU COFFRE PRIVÉ (LIEN SECRET ?vault=mima ou ?vault=babi)
-             ======================================================== -->
+        <!-- VUE DU COFFRE PRIVÉ -->
         <section id="privateVaultView">
             <div class="wax-lock">🔒</div>
             <h2 class="serif" id="vaultChildTitle" style="font-size: 2rem; color: var(--gold-18); margin-bottom: 4px;"></h2>
@@ -450,10 +448,7 @@
             </div>
         </section>
 
-
-        <!-- ========================================================
-             VUE PRINCIPALE DU SITE
-             ======================================================== -->
+        <!-- VUE PRINCIPALE DU SITE -->
         <div id="normalSiteView">
 
             <nav class="main-nav">
@@ -544,7 +539,6 @@
                         Chaque enfant possède son propre lien privé.
                     </p>
 
-                    <!-- Liens Privés -->
                     <div class="secret-link-box">
                         <strong style="color: var(--mima-pink);">🌸 Lien Secret pour MIMA (18 ans en 2041) :</strong>
                         <div style="font-size: 0.8rem; color: #666; word-break: break-all; margin: 4px 0;" id="linkMimaDisplay">...</div>
@@ -558,7 +552,6 @@
                     </div>
                 </div>
 
-                <!-- Formulaire Secret -->
                 <div class="form-card" style="border: 2px solid #E5C58D;">
                     <h3 class="serif" style="font-size: 1.4rem; text-align: center; margin-bottom: 12px; color: var(--gold-18);">
                         ✉️ Déposer un Message Secret
@@ -658,7 +651,7 @@
             });
             renderTableau();
         }, (error) => {
-            console.error("Erreur Cloud:", error);
+            console.error("Erreur de lecture Cloud:", error);
         });
 
         // ROUTAGE PAR LIEN SECRET
@@ -745,7 +738,7 @@
                     audioChunks = [];
 
                     activeRecorder.ondataavailable = e => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
+                        if (e.data && e.data.size > 0) audioChunks.push(e.data);
                     };
 
                     activeRecorder.onstop = () => {
@@ -789,7 +782,7 @@
             }
         }
 
-        // COMPRESSION PHOTO
+        // COMPRESSION FORCÉE DE LA PHOTO (Optimisée à 100% pour iPhone)
         function handlePhotoPreview(event) {
             const file = event.target.files[0];
             if (file) {
@@ -800,14 +793,18 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const maxDim = 800;
+                        const maxDim = 600; // Format idéal et ultra-léger (~40 Ko)
 
-                        if (width > height && width > maxDim) {
-                            height = Math.round((height * maxDim) / width);
-                            width = maxDim;
-                        } else if (height > maxDim) {
-                            width = Math.round((width * maxDim) / height);
-                            height = maxDim;
+                        if (width > height) {
+                            if (width > maxDim) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            }
+                        } else {
+                            if (height > maxDim) {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
                         }
 
                         canvas.width = width;
@@ -815,7 +812,7 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        currentGenPhotoData = canvas.toDataURL('image/jpeg', 0.7);
+                        currentGenPhotoData = canvas.toDataURL('image/jpeg', 0.6);
                         document.getElementById('genPhotoImg').src = currentGenPhotoData;
                         document.getElementById('genPhotoBox').style.display = 'block';
                     };
@@ -825,26 +822,27 @@
             }
         }
 
-        // SAUVEGARDE SOUVENIR
+        // SAUVEGARDE SECURISEE DANS LE CLOUD
         async function saveGeneralMemory(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('genSubmitBtn');
-            submitBtn.textContent = "⏳ Synchronisation avec le Cloud...";
+            submitBtn.textContent = "⏳ Envoi au Cloud...";
             submitBtn.disabled = true;
 
-            const title = document.getElementById('genTitle').value.trim();
-            const date = document.getElementById('genDate').value;
-            const story = document.getElementById('genStory').value.trim();
+            const title = (document.getElementById('genTitle').value || '').trim();
+            const date = document.getElementById('genDate').value || '';
+            const story = (document.getElementById('genStory').value || '').trim();
             const ageCalculated = calculateAge(currentKidChoice, date);
 
+            // Structure propre sans aucun champ "undefined"
             const newMemory = {
-                kid: currentKidChoice,
+                kid: currentKidChoice || 'Mima',
                 title: title,
                 date: date,
                 age: ageCalculated,
                 story: story,
-                photo: currentGenPhotoData,
-                audio: currentGenAudioData,
+                photo: currentGenPhotoData || null,
+                audio: currentGenAudioData || null,
                 createdAt: Date.now()
             };
 
@@ -859,10 +857,11 @@
                 document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
                 document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
 
-                alert("Souvenir enregistré et synchronisé sur tous les téléphones ! ☁️❤️");
+                alert("Souvenir bien synchronisé sur tous les téléphones ! ☁️❤️");
                 switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
             } catch (err) {
-                alert("Erreur Cloud : Avez-vous activé Firestore en Mode Test sur Firebase ?");
+                console.error("Détail de l'erreur :", err);
+                alert("Erreur Cloud : " + (err.message || "Erreur inconnue"));
             }
 
             submitBtn.textContent = "💾 Enregistrer et synchroniser";
@@ -873,17 +872,17 @@
         async function saveSecret18Message(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('capSubmitBtn');
-            submitBtn.textContent = "⏳ Scellement dans le Cloud...";
+            submitBtn.textContent = "⏳ Scellement...";
             submitBtn.disabled = true;
 
-            const title = document.getElementById('capTitle').value.trim();
-            const letter = document.getElementById('capLetter').value.trim();
+            const title = (document.getElementById('capTitle').value || '').trim();
+            const letter = (document.getElementById('capLetter').value || '').trim();
             const collectionName = (currentCapChoice === 'Mima') ? 'secrets_mima' : 'secrets_babi';
 
             const newLetter = {
                 title: title,
                 letter: letter,
-                audio: currentCapAudioData,
+                audio: currentCapAudioData || null,
                 dateAdded: new Date().toLocaleDateString('fr-FR'),
                 createdAt: Date.now()
             };
@@ -898,14 +897,14 @@
 
                 alert("Message scellé avec succès dans le Cloud secret de " + currentCapChoice + " ! 🔒");
             } catch(err) {
-                alert("Erreur Cloud : Vérifiez le mode test de Firestore.");
+                alert("Erreur Cloud : " + (err.message || "Erreur inconnue"));
             }
 
             submitBtn.textContent = "🔒 Sceller dans le Cloud sécurisé";
             submitBtn.disabled = false;
         }
 
-        // SUPPRESSION CLOUD
+        // SUPPRESSION
         async function deleteMemory(id) {
             if (confirm("Supprimer définitivement ce souvenir sur tous les appareils ?")) {
                 try {
@@ -928,7 +927,7 @@
             }
         }
 
-        // AFFICHAGE DU TABLEAU
+        // AFFICHAGE TABLEAU
         function filterTable(kid, btnEl) {
             tableFilter = kid;
             document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
@@ -980,7 +979,7 @@
                             <div class="memory-row ${edgeClass}">
                                 <div class="row-meta">
                                     <span class="badge-kid-tag ${tagClass}">${kidEmoji}</span>
-                                    <span style="font-weight:700; color:#888;">Âge : ${m.age}</span>
+                                    <span style="font-weight:700; color:#888;">Âge : ${m.age || ''}</span>
                                 </div>
                                 <h4 class="serif" style="font-size:1.3rem; margin:4px 0;">${cleanTxt(m.title)}</h4>
                                 ${m.story ? `<div class="row-story">${cleanTxt(m.story)}</div>` : ''}
@@ -1050,7 +1049,7 @@
                         </div>
                         ${item.audio ? `<audio controls src="${item.audio}" style="width:100%; height:38px; margin-top:10px;"></audio>` : ''}
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                            <span style="font-size:0.75rem; color:#999;">🔒 Scellé le : ${item.dateAdded}</span>
+                            <span style="font-size:0.75rem; color:#999;">🔒 Scellé le : ${item.dateAdded || ''}</span>
                             <button type="button" class="btn-delete-row" onclick="deleteSecretLetter('${doc.id}', '${kid}')">🗑️ Supprimer</button>
                         </div>
                     `;
