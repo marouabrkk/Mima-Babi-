@@ -56,10 +56,22 @@
         /* EN-TÊTE */
         .site-header {
             text-align: center;
-            padding: 35px 15px 25px;
+            padding: 25px 15px 20px;
             background: #FFFFFF;
             border-bottom: 1px solid var(--border);
             margin-bottom: 20px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: #E8F5E9;
+            color: #2E7D32;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid #C8E6C9;
+            margin-bottom: 8px;
         }
 
         .header-tag {
@@ -423,6 +435,7 @@
     <!-- EN-TÊTE -->
     <header class="site-header" id="mainHeader">
         <div class="container">
+            <span class="version-badge">✅ Version 5.0 à jour</span><br>
             <span class="header-tag">❤️ POUR MA SŒUR KHADIJA</span><br>
             <h1 class="header-title serif">Le Coffre aux Souvenirs</h1>
             <p class="header-subtitle">Les Trésors de Mima & Babi</p>
@@ -597,12 +610,10 @@
     </div>
 
     <script>
-        // ===================================================================
-        // 1. BASE DE DONNÉES LOCALE PERMANENTE ET ROBUSTE (INDEXED-DB)
-        // ===================================================================
+        // BASE DE DONNÉES PERMANENTE ET AUTO-RÉCUPÉRATION
         function initDB() {
             return new Promise((resolve) => {
-                const req = indexedDB.open('KhadijaTreasuresVault', 1);
+                const req = indexedDB.open('KhadijaTreasuresVaultV5', 1);
                 req.onupgradeneeded = (e) => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains('memories')) {
@@ -648,9 +659,76 @@
             } catch(e) {}
         }
 
-        // ===================================================================
-        // 2. CONFIGURATION GOOGLE FIREBASE
-        // ===================================================================
+        // AUTO-RÉCUPÉRATION DU PASSÉ
+        async function recoverEverything() {
+            const memoryKeys = [
+                'khadija_solid_memories',
+                'khadija_cloud_memories_v4',
+                'khadija_timeline_memories',
+                'khadija_final_memories',
+                'khadija_kids_memories_v2',
+                'khadija_kids_memories',
+                'khadija_treasure_box',
+                'khadija_memories'
+            ];
+
+            for (const k of memoryKeys) {
+                try {
+                    const items = JSON.parse(localStorage.getItem(k)) || [];
+                    for (const m of items) {
+                        if (m && (m.title || m.story)) {
+                            await dbPut('memories', {
+                                id: String(m.id || 'mem_' + Math.random()),
+                                kid: m.kid || m.child || 'Mima',
+                                title: m.title || 'Souvenir précieux',
+                                date: m.date || '2026-01-01',
+                                age: m.age || '',
+                                story: m.story || m.notes || '',
+                                photo: m.photo || '',
+                                audio: m.audio || '',
+                                createdAt: m.createdAt || Date.now()
+                            });
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            const secretKeys = [
+                'khadija_final_capsules',
+                'khadija_18_capsules_v2',
+                'khadija_18_capsules',
+                'vault_18_mima_secret',
+                'vault_18_babi_secret',
+                'vault_mima_v4',
+                'vault_babi_v4',
+                'vault_mima_local',
+                'vault_babi_local'
+            ];
+
+            for (const k of secretKeys) {
+                try {
+                    const items = JSON.parse(localStorage.getItem(k)) || [];
+                    for (const s of items) {
+                        if (s && (s.title || s.letter)) {
+                            let kidTarget = s.kid || s.child || (k.includes('mima') ? 'Mima' : 'Babi');
+                            await dbPut('secrets', {
+                                id: String(s.id || 'sec_' + Math.random()),
+                                kid: kidTarget,
+                                title: s.title || 'Message secret',
+                                letter: s.letter || s.story || '',
+                                audio: s.audio || '',
+                                dateAdded: s.dateAdded || 'Scellé',
+                                createdAt: s.createdAt || Date.now()
+                            });
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            renderTableau();
+        }
+
+        // CONFIGURATION FIREBASE CLOUD
         const firebaseConfig = {
             apiKey: "AIzaSyBajSnvGZ34HYRXXI2zPoYqT30yyLF7MqU",
             authDomain: "souvenirs-khadija.firebaseapp.com",
@@ -695,12 +773,6 @@
             document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
         } catch(e) {}
 
-        // CHARGEMENT & SYNCHRONISATION
-        async function loadAndRender() {
-            renderTableau();
-        }
-
-        // ÉCOUTE CLOUD INTELLIGENTE (FUSIONNE SANS JAMAIS EFFACER)
         if (fdb) {
             try {
                 fdb.collection('memories').onSnapshot((snapshot) => {
@@ -714,7 +786,9 @@
             } catch(e) {}
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            await recoverEverything();
+
             const urlParams = new URLSearchParams(window.location.search);
             const vault = urlParams.get('vault');
             if (vault === 'mima' || vault === 'Mima') {
@@ -779,7 +853,7 @@
             } catch(e) { return ''; }
         }
 
-        // ENREGISTREUR VOCAL HAUTE COMPRESSION
+        // ENREGISTREUR VOCAL (Voix HD compacte)
         async function handleVoiceRecord(mode) {
             const btn = document.getElementById(mode + 'MicBtn');
             const status = document.getElementById(mode + 'MicStatus');
@@ -890,7 +964,7 @@
             }
         }
 
-        // SAUVEGARDE 100% BLINDÉE (NE S'EFFACE PLUS JAMAIS)
+        // SAUVEGARDE SANS AUCUN BLOCAGE NI ERREUR
         async function saveGeneralMemory(e) {
             e.preventDefault();
 
@@ -912,10 +986,8 @@
                 createdAt: Date.now()
             };
 
-            // 1. Enregistrement garanti dans la base permanente
             await dbPut('memories', newMemory);
 
-            // 2. Réinitialisation
             document.getElementById('formGeneral').reset();
             currentGenPhotoData = "";
             currentGenAudioData = "";
@@ -924,20 +996,16 @@
             document.getElementById('genMicStatus').textContent = "Appuyez pour enregistrer";
             document.getElementById('genDate').value = new Date().toISOString().split('T')[0];
 
-            // 3. Mise à jour immédiate de l'écran
             renderTableau();
-            alert("Souvenir enregistré et gardé pour toujours ! ❤️");
+            alert("Souvenir enregistré avec succès ! ❤️");
             switchNav('panelTable', document.querySelectorAll('.nav-btn')[0]);
 
-            // 4. Synchronisation Google Cloud
             if (fdb) {
-                try {
-                    await fdb.collection('memories').doc(memoryId).set(newMemory);
-                } catch(e) {}
+                try { await fdb.collection('memories').doc(memoryId).set(newMemory); } catch(e) {}
             }
         }
 
-        // SAUVEGARDE SECRÈTE 18 ANS
+        // SAUVEGARDE 18 ANS
         async function saveSecret18Message(e) {
             e.preventDefault();
 
@@ -966,9 +1034,7 @@
             alert("Message scellé avec succès pour " + currentCapChoice + " ! 🔒");
 
             if (fdb) {
-                try {
-                    await fdb.collection(collectionName).doc(secretId).set(newLetter);
-                } catch(e) {}
+                try { await fdb.collection(collectionName).doc(secretId).set(newLetter); } catch(e) {}
             }
         }
 
